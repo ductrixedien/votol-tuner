@@ -2,127 +2,88 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>VOTOL Tuner Pro — 80S / 100S / 150S</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<title>VOTOL Tuner Mobile</title>
 <style>
   :root{
-    --bg:#0f1419; --panel:#1a212b; --line:#2a3340;
-    --txt:#e6edf3; --muted:#8b98a5; --accent:#00d4ff;
-    --ok:#22c55e; --warn:#f59e0b; --err:#ef4444;
-    --tab-active:#00d4ff;
+    --bg:#0f1419;--panel:#1a212b;--line:#2a3340;
+    --txt:#e6edf3;--muted:#8b98a5;--accent:#00d4ff;
+    --ok:#22c55e;--warn:#f59e0b;--err:#ef4444;
   }
-  *{box-sizing:border-box}
-  body{
-    margin:0; font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
-    background:var(--bg); color:var(--txt); line-height:1.45;
-  }
-  header{
-    padding:16px 20px; border-bottom:1px solid var(--line);
-    display:flex; align-items:center; gap:14px; flex-wrap:wrap;
-    background:var(--panel); position:sticky; top:0; z-index:10;
-  }
-  header h1{margin:0; font-size:18px; letter-spacing:.5px}
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  body{margin:0;font-family:system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--txt);font-size:14px}
+  header{padding:12px 14px;background:var(--panel);border-bottom:1px solid var(--line);
+    display:flex;align-items:center;gap:8px;position:sticky;top:0;z-index:100}
+  header h1{margin:0;font-size:15px;font-weight:600}
   header h1 span{color:var(--accent)}
-  .badge{
-    font-size:11px; padding:3px 8px; border-radius:999px;
-    background:var(--line); color:var(--muted);
-  }
-  main{padding:20px; max-width:1400px; margin:0 auto}
-  .panel{
-    background:var(--panel); border:1px solid var(--line);
-    border-radius:10px; padding:16px; margin-bottom:16px;
-  }
-  .panel h2{margin:0 0 12px; font-size:14px; text-transform:uppercase;
-    letter-spacing:1px; color:var(--muted); font-weight:600}
-  .row{display:flex; gap:10px; flex-wrap:wrap; align-items:center}
-  button{
-    background:var(--line); color:var(--txt); border:1px solid #334152;
-    padding:8px 14px; border-radius:6px; cursor:pointer; font-size:13px;
-    transition:.15s;
-  }
-  button:hover:not(:disabled){border-color:var(--accent); color:var(--accent)}
-  button:disabled{opacity:.4; cursor:not-allowed}
-  button.primary{background:var(--accent); color:#001824; border-color:var(--accent); font-weight:600}
-  button.primary:hover:not(:disabled){filter:brightness(1.15); color:#001824}
-  button.danger{border-color:#5a2a2a}
-  select,input,textarea{
-    background:#0d1218; color:var(--txt); border:1px solid var(--line);
-    padding:7px 10px; border-radius:6px; font-size:13px; font-family:inherit;
-  }
-  input[type=text]{font-family:ui-monospace,"SF Mono",Consolas,monospace}
-  input:focus,select:focus,textarea:focus{outline:none; border-color:var(--accent)}
-  table{width:100%; border-collapse:collapse; font-size:13px}
-  th,td{padding:8px 10px; text-align:left; border-bottom:1px solid var(--line)}
-  th{color:var(--muted); font-weight:500; font-size:11px;
-    text-transform:uppercase; letter-spacing:.5px}
-  td input{width:100%; padding:5px 8px}
-  .unit{color:var(--muted); font-size:11px; min-width:50px}
-  .status-dot{
-    width:10px; height:10px; border-radius:50%; background:var(--err);
-    display:inline-block; margin-right:6px; transition:.2s;
-  }
-  .status-dot.on{background:var(--ok); box-shadow:0 0 8px var(--ok)}
-  #log{
-    background:#080b0f; border:1px solid var(--line); border-radius:8px;
-    padding:12px; height:260px; overflow-y:auto;
-    font-family:ui-monospace,"SF Mono",Consolas,monospace;
-    font-size:12px; white-space:pre-wrap; word-break:break-all;
-  }
-  .log-line{padding:1px 0}
-  .log-tx{color:var(--accent)}
-  .log-rx{color:var(--ok)}
-  .log-err{color:var(--err)}
-  .log-info{color:var(--muted)}
-  .tabs{display:flex; gap:4px; margin-bottom:16px; border-bottom:1px solid var(--line); flex-wrap:wrap}
-  .tab{
-    padding:10px 20px; cursor:pointer; border:none; background:transparent;
-    color:var(--muted); font-size:13px; font-weight:500; border-bottom:2px solid transparent;
-    transition:.2s;
-  }
-  .tab:hover{color:var(--txt)}
-  .tab.active{color:var(--tab-active); border-bottom-color:var(--tab-active)}
+  .dot{width:9px;height:9px;border-radius:50%;background:var(--err);margin-left:auto;transition:.3s}
+  .dot.on{background:var(--ok);box-shadow:0 0 8px var(--ok)}
+  main{padding:12px;max-width:900px;margin:0 auto;padding-bottom:80px}
+  .panel{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px;margin-bottom:12px}
+  .panel h2{margin:0 0 10px;font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);font-weight:600}
+  button{background:var(--line);color:var(--txt);border:1px solid #334152;
+    padding:10px 14px;border-radius:8px;cursor:pointer;font-size:13px;font-weight:500;transition:.15s}
+  button:active:not(:disabled){transform:scale(.97)}
+  button:disabled{opacity:.4}
+  button.primary{background:var(--accent);color:#001824;border-color:var(--accent);font-weight:700}
+  button.danger{border-color:#7a3a3a;color:#ff8f8f}
+  button.wide{width:100%;padding:14px;font-size:15px}
+  select,input,textarea{background:#0d1218;color:var(--txt);border:1px solid var(--line);
+    padding:9px 10px;border-radius:7px;font-size:13px;font-family:inherit;width:100%}
+  input:focus,select:focus{outline:none;border-color:var(--accent)}
+  .row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+  .row>*{flex:1;min-width:0}
+  .row button{flex:0 0 auto}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
+  .card{background:#0d1218;border:1px solid var(--line);border-radius:8px;
+    padding:10px;display:flex;flex-direction:column;gap:6px}
+  .card label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
+  .card .val{font-size:13px;color:var(--accent);font-family:ui-monospace,monospace;min-height:16px}
+  .card input{font-size:14px;padding:7px 9px;text-align:center;font-family:ui-monospace,monospace}
+  .tabs{display:flex;gap:2px;margin-bottom:12px;overflow-x:auto;padding-bottom:2px}
+  .tab{flex:0 0 auto;padding:9px 14px;border:1px solid var(--line);background:transparent;
+    color:var(--muted);border-radius:8px;font-size:12px;white-space:nowrap}
+  .tab.active{background:var(--accent);color:#001824;border-color:var(--accent);font-weight:700}
   .tab-content{display:none}
   .tab-content.active{display:block}
-  .telemetry-grid{
-    display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:12px;
-  }
-  .telemetry-card{
-    background:#0d1218; border:1px solid var(--line); border-radius:8px;
-    padding:14px; text-align:center;
-  }
-  .telemetry-card .label{font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:.5px}
-  .telemetry-card .value{font-size:22px; font-weight:700; color:var(--accent); margin-top:4px; font-family:ui-monospace,monospace}
-  .telemetry-card .unit{font-size:11px; color:var(--muted)}
-  .bulk-textarea{width:100%; height:120px; resize:vertical; font-family:ui-monospace,monospace; font-size:12px}
-  .warning{color:var(--warn); font-size:12px; margin-top:4px}
-  .footer{text-align:center; padding:30px; color:var(--muted); font-size:12px}
-  .footer a{color:var(--accent); text-decoration:none}
-  @media(max-width:700px){
-    .telemetry-grid{grid-template-columns:repeat(2,1fr)}
-    header h1{font-size:16px}
-  }
+  .tel-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+  .tel{background:#0d1218;border:1px solid var(--line);border-radius:8px;padding:10px;text-align:center}
+  .tel .lbl{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
+  .tel .num{font-size:17px;font-weight:700;color:var(--accent);font-family:ui-monospace,monospace;margin-top:3px}
+  .tel .un{font-size:10px;color:var(--muted)}
+  #log{background:#080b0f;border:1px solid var(--line);border-radius:8px;padding:10px;
+    height:200px;overflow-y:auto;font-family:ui-monospace,monospace;font-size:11px;
+    white-space:pre-wrap;word-break:break-all;color:var(--muted)}
+  .l-tx{color:var(--accent)}.l-rx{color:var(--ok)}.l-err{color:var(--err)}
+  .hint{font-size:11px;color:var(--muted);margin-top:6px;line-height:1.4}
+  .tag{display:inline-block;font-size:10px;padding:2px 7px;border-radius:10px;
+    background:var(--line);color:var(--muted);margin-left:6px}
+  .warnbox{background:#2a1f0a;border:1px solid #5a4a1a;color:#fbbf24;
+    padding:10px;border-radius:8px;font-size:12px;margin-bottom:12px;line-height:1.5}
 </style>
 </head>
 <body>
 
 <header>
-  <h1>⚡ VOTOL <span>Tuner Pro</span></h1>
-  <span class="badge">80S · 100S · 150S</span>
-  <span style="margin-left:auto; display:flex; align-items:center; font-size:13px">
-    <span id="statusDot" class="status-dot"></span>
-    <span id="statusText">Chưa kết nối</span>
-  </span>
+  <h1>⚡ VOTOL <span>Tuner</span></h1>
+  <span class="tag">Mobile</span>
+  <span id="dot" class="dot"></span>
 </header>
 
 <main>
 
+<div class="warnbox">
+  📱 <b>Yêu cầu:</b> Chrome Android + cáp USB-serial (CH340/CP2102/FTDI) + đầu chuyển OTG. iPhone không hỗ trợ.
+</div>
+
 <!-- KẾT NỐI -->
 <section class="panel">
   <h2>Kết nối</h2>
-  <div class="row">
-    <button id="btnConnect" class="primary">🔌 Kết nối USB</button>
-    <button id="btnDisconnect" disabled>Ngắt</button>
-    <label style="font-size:13px">Baud:
+  <button id="btnConnect" class="primary wide" style="margin-bottom:8px">🔌 Kết nối cáp USB</button>
+  <button id="btnDisconnect" class="wide" disabled>Ngắt kết nối</button>
+  <div class="grid" style="margin-top:10px">
+    <div class="card">
+      <label>Baud</label>
       <select id="baud">
         <option value="9600">9600</option>
         <option value="19200">19200</option>
@@ -130,47 +91,37 @@
         <option value="57600">57600</option>
         <option value="115200" selected>115200</option>
       </select>
-    </label>
-    <label style="font-size:13px">Model:
+    </div>
+    <div class="card">
+      <label>Model</label>
       <select id="model">
         <option>VOTOL EM-80S</option>
         <option selected>VOTOL EM-100S</option>
         <option>VOTOL EM-150S</option>
       </select>
-    </label>
+    </div>
   </div>
-  <div class="hint">Dùng Chrome/Edge. Cắm cáp USB vào controller trước khi bấm kết nối.</div>
+  <div id="chipInfo" class="hint">Chip: chưa kết nối</div>
 </section>
 
 <!-- TABS -->
 <div class="tabs">
-  <button class="tab active" data-tab="basic">⚙️ Cơ bản</button>
-  <button class="tab" data-tab="advanced">🔧 Nâng cao</button>
-  <button class="tab" data-tab="modes">🏎️ Chế độ lái</button>
-  <button class="tab" data-tab="monitor">📊 Giám sát</button>
+  <button class="tab active" data-tab="basic">Cơ bản</button>
+  <button class="tab" data-tab="advanced">Nâng cao</button>
+  <button class="tab" data-tab="modes">Chế độ lái</button>
+  <button class="tab" data-tab="monitor">Giám sát</button>
+  <button class="tab" data-tab="log">Log</button>
 </div>
 
 <!-- TAB CƠ BẢN -->
 <div id="tab-basic" class="tab-content active">
   <section class="panel">
     <h2>Thông số hệ thống</h2>
-    <div class="row" style="margin-bottom:12px">
-      <button id="btnReadBasic">📥 Đọc tab này</button>
-      <button id="btnWriteBasic" class="danger">📤 Ghi tab này</button>
+    <div class="row" style="margin-bottom:10px">
+      <button id="rdBasic">📥 Đọc tab</button>
+      <button id="wrBasic" class="danger">📤 Ghi tab</button>
     </div>
-    <table>
-      <thead>
-        <tr>
-          <th style="width:30%">Thông số</th>
-          <th style="width:14%">Địa chỉ</th>
-          <th style="width:16%">Giá trị đọc</th>
-          <th style="width:16%">Giá trị mới</th>
-          <th style="width:10%">Đơn vị</th>
-          <th style="width:14%">Giới hạn</th>
-        </tr>
-      </thead>
-      <tbody id="tbody-basic"></tbody>
-    </table>
+    <div id="grid-basic" class="grid" style="grid-template-columns:1fr"></div>
   </section>
 </div>
 
@@ -178,615 +129,427 @@
 <div id="tab-advanced" class="tab-content">
   <section class="panel">
     <h2>Thông số nâng cao</h2>
-    <div class="row" style="margin-bottom:12px">
-      <button id="btnReadAdvanced">📥 Đọc tab này</button>
-      <button id="btnWriteAdvanced" class="danger">📤 Ghi tab này</button>
+    <div class="row" style="margin-bottom:10px">
+      <button id="rdAdv">📥 Đọc tab</button>
+      <button id="wrAdv" class="danger">📤 Ghi tab</button>
     </div>
-    <table>
-      <thead>
-        <tr>
-          <th style="width:30%">Thông số</th>
-          <th style="width:14%">Địa chỉ</th>
-          <th style="width:16%">Giá trị đọc</th>
-          <th style="width:16%">Giá trị mới</th>
-          <th style="width:10%">Đơn vị</th>
-          <th style="width:14%">Giới hạn</th>
-        </tr>
-      </thead>
-      <tbody id="tbody-advanced"></tbody>
-    </table>
+    <div id="grid-advanced" class="grid" style="grid-template-columns:1fr"></div>
   </section>
 </div>
 
 <!-- TAB CHẾ ĐỘ LÁI -->
 <div id="tab-modes" class="tab-content">
   <section class="panel">
-    <h2>Chế độ lái (Speed Modes)</h2>
-    <div class="row" style="margin-bottom:12px">
-      <button id="btnReadModes">📥 Đọc tab này</button>
-      <button id="btnWriteModes" class="danger">📤 Ghi tab này</button>
+    <h2>Chế độ lái</h2>
+    <div class="row" style="margin-bottom:10px">
+      <button id="rdModes">📥 Đọc tab</button>
+      <button id="wrModes" class="danger">📤 Ghi tab</button>
     </div>
-    <table>
-      <thead>
-        <tr>
-          <th style="width:30%">Thông số</th>
-          <th style="width:14%">Địa chỉ</th>
-          <th style="width:16%">Giá trị đọc</th>
-          <th style="width:16%">Giá trị mới</th>
-          <th style="width:10%">Đơn vị</th>
-          <th style="width:14%">Giới hạn</th>
-        </tr>
-      </thead>
-      <tbody id="tbody-modes"></tbody>
-    </table>
+    <div id="grid-modes" class="grid" style="grid-template-columns:1fr"></div>
   </section>
 </div>
 
 <!-- TAB GIÁM SÁT -->
 <div id="tab-monitor" class="tab-content">
   <section class="panel">
-    <h2>Giám sát thời gian thực</h2>
-    <div class="row" style="margin-bottom:12px">
-      <button id="btnStartMonitor" class="primary">▶️ Bắt đầu</button>
-      <button id="btnStopMonitor" disabled>⏹ Dừng</button>
+    <h2>Telemetry thời gian thực</h2>
+    <div class="row" style="margin-bottom:10px">
+      <button id="btnStartMon" class="primary">▶ Bắt đầu</button>
+      <button id="btnStopMon" disabled>⏹ Dừng</button>
     </div>
-    <div class="telemetry-grid">
-      <div class="telemetry-card">
-        <div class="label">Điện áp pin</div>
-        <div class="value" id="tel-voltage">--</div>
-        <div class="unit">V</div>
-      </div>
-      <div class="telemetry-card">
-        <div class="label">Dòng điện</div>
-        <div class="value" id="tel-current">--</div>
-        <div class="unit">A</div>
-      </div>
-      <div class="telemetry-card">
-        <div class="label">Tốc độ</div>
-        <div class="value" id="tel-rpm">--</div>
-        <div class="unit">RPM</div>
-      </div>
-      <div class="telemetry-card">
-        <div class="label">Nhiệt độ Controller</div>
-        <div class="value" id="tel-temp-ctrl">--</div>
-        <div class="unit">°C</div>
-      </div>
-      <div class="telemetry-card">
-        <div class="label">Nhiệt độ Motor</div>
-        <div class="value" id="tel-temp-motor">--</div>
-        <div class="unit">°C</div>
-      </div>
-      <div class="telemetry-card">
-        <div class="label">Chế độ</div>
-        <div class="value" id="tel-mode">--</div>
-        <div class="unit"></div>
-      </div>
-      <div class="telemetry-card">
-        <div class="label">Lỗi</div>
-        <div class="value" id="tel-error">--</div>
-        <div class="unit"></div>
-      </div>
+    <div class="tel-grid">
+      <div class="tel"><div class="lbl">Pin</div><div class="num" id="t-volt">--</div><div class="un">V</div></div>
+      <div class="tel"><div class="lbl">Dòng</div><div class="num" id="t-curr">--</div><div class="un">A</div></div>
+      <div class="tel"><div class="lbl">RPM</div><div class="num" id="t-rpm">--</div><div class="un">v/p</div></div>
+      <div class="tel"><div class="lbl">T° Ctrl</div><div class="num" id="t-tc">--</div><div class="un">°C</div></div>
+      <div class="tel"><div class="lbl">T° Motor</div><div class="num" id="t-tm">--</div><div class="un">°C</div></div>
+      <div class="tel"><div class="lbl">Mode</div><div class="num" id="t-mode">--</div><div class="un"></div></div>
     </div>
   </section>
 </div>
 
-<!-- NHẬP HÀNG LOẠT -->
-<section class="panel">
-  <h2>Nhập / Xuất hàng loạt</h2>
-  <div class="row" style="margin-bottom:10px">
-    <button id="btnExportCSV">📄 Xuất CSV</button>
-    <button id="btnImportCSV">📂 Nhập CSV</button>
-    <input type="file" id="csvInput" accept=".csv,.txt" hidden>
-  </div>
-  <textarea id="bulkText" class="bulk-textarea" placeholder="Dán danh sách giá trị theo định dạng:&#10;Tên thông số,Giá trị&#10;Ví dụ:&#10;Max Phase Current,80&#10;Flux Weakening,120&#10;Low Gear Speed,30"></textarea>
-  <div class="row" style="margin-top:10px">
-    <button id="btnApplyBulk" class="primary">✅ Áp dụng hàng loạt</button>
-  </div>
-</section>
-
-<!-- LỆNH RAW -->
-<section class="panel">
-  <h2>Lệnh Hex thô (Raw)</h2>
-  <div class="row">
-    <input type="text" id="rawCmd" placeholder="VD: 3A 00 01 00 00 00 00 3B" style="flex:1; min-width:200px">
-    <button id="btnRawSend">Gửi</button>
-  </div>
-  <div class="hint">Dùng để test protocol hoặc thử nghiệm lệnh đặc biệt.</div>
-</section>
-
-<!-- LOG -->
-<section class="panel">
-  <h2>Log giao tiếp</h2>
-  <div class="row" style="margin-bottom:10px">
-    <button id="btnClearLog">Xóa log</button>
-    <label style="font-size:13px"><input type="checkbox" id="autoScroll" checked> Tự cuộn</label>
-  </div>
-  <div id="log"></div>
-</section>
+<!-- TAB LOG -->
+<div id="tab-log" class="tab-content">
+  <section class="panel">
+    <h2>Log giao tiếp</h2>
+    <div class="row" style="margin-bottom:8px">
+      <button id="btnClearLog">Xóa log</button>
+    </div>
+    <div id="log"></div>
+    <h2 style="margin-top:12px">Lệnh Hex thô</h2>
+    <div class="row">
+      <input type="text" id="rawCmd" placeholder="VD: 3A 01 00 01 00 3A" style="flex:2">
+      <button id="btnRaw">Gửi</button>
+    </div>
+  </section>
+</div>
 
 </main>
 
-<div class="footer">
-  VOTOL Tuner Pro · Web Serial API · GitHub Pages<br>
-  ⚠️ Chỉnh sai thông số có thể hỏng controller. Sao lưu cấu hình gốc trước khi ghi.
-</div>
-
 <script>
 /* ============================================================
-   CẤU HÌNH THAM SỐ MẶC ĐỊNH (Mở rộng)
+   1. THAM SỐ (giống bản desktop)
    ============================================================ */
-const DEFAULT_PARAMS = {
+const PARAMS = {
   basic: [
-    { name:'Điện áp định mức', addr:0x0001, unit:'V', scale:0.1, min:48, max:96, value:'', newVal:'' },
-    { name:'Loại pin', addr:0x0002, unit:'', scale:1, min:0, max:3, value:'', newVal:'' },
-    { name:'Dòng pha tối đa', addr:0x0003, unit:'A', scale:1, min:0, max:400, value:'', newVal:'' },
-    { name:'Dòng đường tối đa', addr:0x0004, unit:'A', scale:1, min:0, max:200, value:'', newVal:'' },
-    { name:'Dòng Boost tối đa', addr:0x0005, unit:'A', scale:1, min:0, max:250, value:'', newVal:'' },
-    { name:'Số cặp cực motor', addr:0x0006, unit:'', scale:1, min:1, max:32, value:'', newVal:'' },
-    { name:'Đường kính bánh', addr:0x0007, unit:'inch', scale:0.1, min:8, max:24, value:'', newVal:'' },
-    { name:'Tỉ số truyền', addr:0x0008, unit:'', scale:0.01, min:0.5, max:10, value:'', newVal:'' },
-    { name:'Điện áp cắt dưới', addr:0x0009, unit:'V', scale:0.1, min:30, max:80, value:'', newVal:'' },
-    { name:'Điện áp bảo vệ trên', addr:0x000A, unit:'V', scale:0.1, min:60, max:100, value:'', newVal:'' },
-    { name:'Điện áp khởi động ga', addr:0x000B, unit:'mV', scale:1, min:800, max:2000, value:'', newVal:'' },
-    { name:'Điện áp điểm chết ga', addr:0x000C, unit:'mV', scale:1, min:100, max:1000, value:'', newVal:'' },
-    { name:'Điện áp tối đa ga', addr:0x000D, unit:'mV', scale:1, min:3000, max:5000, value:'', newVal:'' },
+    {n:'Điện áp định mức',a:0x0001,u:'V',s:0.1,mn:48,mx:96},
+    {n:'Loại pin (0-3)',a:0x0002,u:'',s:1,mn:0,mx:3},
+    {n:'Dòng pha tối đa',a:0x0003,u:'A',s:1,mn:0,mx:400},
+    {n:'Dòng đường tối đa',a:0x0004,u:'A',s:1,mn:0,mx:200},
+    {n:'Dòng Boost',a:0x0005,u:'A',s:1,mn:0,mx:250},
+    {n:'Số cặp cực',a:0x0006,u:'',s:1,mn:1,mx:32},
+    {n:'Đường kính bánh',a:0x0007,u:'inch',s:0.1,mn:8,mx:24},
+    {n:'Tỉ số truyền',a:0x0008,u:'',s:0.01,mn:0.5,mx:10},
+    {n:'Điện áp cắt dưới',a:0x0009,u:'V',s:0.1,mn:30,mx:80},
+    {n:'Điện áp bảo vệ trên',a:0x000A,u:'V',s:0.1,mn:60,mx:100},
   ],
   advanced: [
-    { name:'Flux Weakening', addr:0x0100, unit:'%', scale:1, min:100, max:200, value:'', newVal:'' },
-    { name:'EBS Ratio', addr:0x0101, unit:'%', scale:1, min:0, max:100, value:'', newVal:'' },
-    { name:'EBS Delay', addr:0x0102, unit:'ms', scale:1, min:0, max:2000, value:'', newVal:'' },
-    { name:'PID Kp', addr:0x0103, unit:'', scale:0.01, min:0, max:100, value:'', newVal:'' },
-    { name:'PID Ki', addr:0x0104, unit:'', scale:0.01, min:0, max:100, value:'', newVal:'' },
-    { name:'Nhiệt độ cảnh báo Controller', addr:0x0105, unit:'°C', scale:1, min:60, max:120, value:'', newVal:'' },
-    { name:'Nhiệt độ cắt Controller', addr:0x0106, unit:'°C', scale:1, min:80, max:150, value:'', newVal:'' },
-    { name:'Nhiệt độ cảnh báo Motor', addr:0x0107, unit:'°C', scale:1, min:60, max:150, value:'', newVal:'' },
-    { name:'Nhiệt độ cắt Motor', addr:0x0108, unit:'°C', scale:1, min:80, max:180, value:'', newVal:'' },
-    { name:'Góc lệch Hall', addr:0x0109, unit:'°', scale:1, min:-30, max:30, value:'', newVal:'' },
+    {n:'Flux Weakening',a:0x0100,u:'%',s:1,mn:100,mx:200},
+    {n:'EBS Ratio',a:0x0101,u:'%',s:1,mn:0,mx:100},
+    {n:'EBS Delay',a:0x0102,u:'ms',s:1,mn:0,mx:2000},
+    {n:'PID Kp',a:0x0103,u:'',s:0.01,mn:0,mx:100},
+    {n:'PID Ki',a:0x0104,u:'',s:0.01,mn:0,mx:100},
+    {n:'T° cảnh báo Ctrl',a:0x0105,u:'°C',s:1,mn:60,mx:120},
+    {n:'T° cắt Ctrl',a:0x0106,u:'°C',s:1,mn:80,mx:150},
+    {n:'T° cảnh báo Motor',a:0x0107,u:'°C',s:1,mn:60,mx:150},
+    {n:'T° cắt Motor',a:0x0108,u:'°C',s:1,mn:80,mx:180},
   ],
   modes: [
-    { name:'Low Gear Speed', addr:0x0200, unit:'km/h', scale:1, min:10, max:120, value:'', newVal:'' },
-    { name:'Low Gear Current', addr:0x0201, unit:'A', scale:1, min:0, max:150, value:'', newVal:'' },
-    { name:'Mid Gear Speed', addr:0x0202, unit:'km/h', scale:1, min:20, max:150, value:'', newVal:'' },
-    { name:'Mid Gear Current', addr:0x0203, unit:'A', scale:1, min:0, max:200, value:'', newVal:'' },
-    { name:'High Gear Speed', addr:0x0204, unit:'km/h', scale:1, min:30, max:200, value:'', newVal:'' },
-    { name:'High Gear Current', addr:0x0205, unit:'A', scale:1, min:0, max:250, value:'', newVal:'' },
-    { name:'Sport Mode Enable', addr:0x0206, unit:'', scale:1, min:0, max:1, value:'', newVal:'' },
-    { name:'Sport Boost Current', addr:0x0207, unit:'A', scale:1, min:0, max:300, value:'', newVal:'' },
-    { name:'Reverse Speed Limit', addr:0x0208, unit:'km/h', scale:1, min:0, max:20, value:'', newVal:'' },
-    { name:'Reverse Current Limit', addr:0x0209, unit:'A', scale:1, min:0, max:50, value:'', newVal:'' },
+    {n:'Low Gear Speed',a:0x0200,u:'km/h',s:1,mn:10,mx:120},
+    {n:'Low Gear Current',a:0x0201,u:'A',s:1,mn:0,mx:150},
+    {n:'Mid Gear Speed',a:0x0202,u:'km/h',s:1,mn:20,mx:150},
+    {n:'Mid Gear Current',a:0x0203,u:'A',s:1,mn:0,mx:200},
+    {n:'High Gear Speed',a:0x0204,u:'km/h',s:1,mn:30,mx:200},
+    {n:'High Gear Current',a:0x0205,u:'A',s:1,mn:0,mx:250},
+    {n:'Sport Mode (0/1)',a:0x0206,u:'',s:1,mn:0,mx:1},
+    {n:'Sport Boost',a:0x0207,u:'A',s:1,mn:0,mx:300},
+    {n:'Reverse Speed',a:0x0208,u:'km/h',s:1,mn:0,mx:20},
+    {n:'Reverse Current',a:0x0209,u:'A',s:1,mn:0,mx:50},
   ]
 };
-
-const MONITOR_PARAMS = [
-  { name:'Điện áp pin', addr:0x1000, unit:'V', scale:0.1, key:'voltage' },
-  { name:'Dòng điện', addr:0x1001, unit:'A', scale:1, key:'current' },
-  { name:'Tốc độ', addr:0x1002, unit:'RPM', scale:1, key:'rpm' },
-  { name:'Nhiệt độ Controller', addr:0x1003, unit:'°C', scale:1, key:'tempCtrl' },
-  { name:'Nhiệt độ Motor', addr:0x1004, unit:'°C', scale:1, key:'tempMotor' },
+const MON = [
+  {n:'Điện áp',a:0x1000,s:0.1,k:'volt',u:'V'},
+  {n:'Dòng',a:0x1001,s:1,k:'curr',u:'A'},
+  {n:'RPM',a:0x1002,s:1,k:'rpm',u:''},
+  {n:'T° Ctrl',a:0x1003,s:1,k:'tc',u:'°C'},
+  {n:'T° Motor',a:0x1004,s:1,k:'tm',u:'°C'},
 ];
 
 /* ============================================================
-   PROTOCOL LAYER (VOTOL)
+   2. VOTOL PROTOCOL
    ============================================================ */
 const PROTO = {
-  START: 0x3A,
-  CMD_READ: 0x01,
-  CMD_WRITE: 0x02,
-  buildRead(addr){
-    const p = [this.START, this.CMD_READ, (addr>>8)&0xFF, addr&0xFF, 0x00];
-    p.push(this.crc(p));
-    return new Uint8Array(p);
-  },
-  buildWrite(addr, value){
-    const p = [this.START, this.CMD_WRITE, (addr>>8)&0xFF, addr&0xFF, 0x02,
-               (value>>8)&0xFF, value&0xFF];
-    p.push(this.crc(p));
-    return new Uint8Array(p);
-  },
-  crc(bytes){
-    let c = 0;
-    for(const b of bytes) c ^= b;
-    return c & 0xFF;
-  },
-  parseResponse(bytes){
-    if(bytes.length < 5) return null;
-    if(bytes[0] !== this.START) return null;
-    const cmd = bytes[1];
-    const addr = (bytes[2]<<8) | bytes[3];
-    const value = (bytes[4]<<8) | bytes[5];
-    return { cmd, addr, value };
-  }
+  START:0x3A, RD:0x01, WR:0x02,
+  rd(addr){ const p=[this.START,this.RD,(addr>>8)&255,addr&255,0]; p.push(this.crc(p)); return new Uint8Array(p); },
+  wr(addr,v){ const p=[this.START,this.WR,(addr>>8)&255,addr&255,2,(v>>8)&255,v&255]; p.push(this.crc(p)); return new Uint8Array(p); },
+  crc(b){ let c=0; for(const x of b) c^=x; return c&255; },
+  parse(b){ if(b.length<5||b[0]!==this.START) return null;
+    return {cmd:b[1],addr:(b[2]<<8)|b[3],value:(b[4]<<8)|b[5]}; }
 };
 
 /* ============================================================
-   STATE
+   3. WEBUSB LAYER + CHIP DRIVERS
    ============================================================ */
-let port = null;
-let reader = null;
-let writer = null;
-let readBuffer = [];
-let keepReading = false;
-let monitorInterval = null;
-let monitorActive = false;
-const pendingReads = new Map();
+let usb=null, epIn=null, epOut=null, ifaceNum=0, keepReading=false, readBuf=[];
+const pending=new Map();
+
+const CHIPS = {
+  0x1A86:{name:'CH340/CH341', baudReg:{ 9600:0xB2,19200:0xD9,38400:0x98,57600:0xE6,115200:0xCC }},
+  0x10C4:{name:'CP210x'},
+  0x0403:{name:'FTDI'},
+  0x067B:{name:'PL2303'},
+};
+
+/* --- CH340 init (theo driver Linux ch34x.c) --- */
+async function initCH340(dev, iface){
+  const baud = +document.getElementById('baud').value;
+  const reg = CHIPS[0x1A86].baudReg[baud] || 0xCC;
+  const ctrlOut = (req,val,idx)=>dev.controlTransferOut({
+    requestType:'vendor', recipient:'device', request:req, value:val, index:idx
+  });
+  await ctrlOut(0xA1, 0, 0);              // Reset
+  await ctrlOut(0x9A, 0x1312, reg);       // Baud low
+  await ctrlOut(0x9A, 0x1313, 0x00);      // Baud high
+  await ctrlOut(0x9A, 0x0F2C, 0x0008);    // Prescaler
+  await ctrlOut(0x9A, 0x2518, 0x00C3);    // Line control 8N1
+}
+
+/* --- CP210x init --- */
+async function initCP210x(dev, iface){
+  const baud = +document.getElementById('baud').value;
+  const clk = 3686400;
+  const div = Math.round(clk / baud);
+  const ctrlOut = (req,val,idx)=>dev.controlTransferOut({
+    requestType:'vendor', recipient:'interface', request:req, value:val, index:idx
+  });
+  // Reset & enable
+  await ctrlOut(0x00, 0x0001, 0);       // IFC_ENABLE
+  await ctrlOut(0x00, 0x0303, iface);   // UART enable
+  // Set baud via register write
+  await ctrlOut(0x1E, 0x0000, (div & 0xFF) | 0x0100);       // reg 0 = low
+  await ctrlOut(0x1E, 0x0000, ((div >> 8) & 0xFF) | 0x0100); // reg 1 = high
+  // Line control: 8N1
+  await ctrlOut(0x1E, 0x0000, 0x0300 | 0x08);                // 8N1
+}
+
+/* --- FTDI init --- */
+async function initFTDI(dev, iface){
+  const baud = +document.getElementById('baud').value;
+  const ctrlOut = (req,val,idx)=>dev.controlTransferOut({
+    requestType:'vendor', recipient:'device', request:req, value:val, index:idx
+  });
+  await ctrlOut(0x00, 0, 0);              // Reset
+  await ctrlOut(0x00, 1, 0);              // Purge RX
+  await ctrlOut(0x00, 2, 0);              // Purge TX
+  // Baud divisor: 48MHz / 16 / baud = 3000000 / baud
+  const div = Math.round(3000000 / baud);
+  await ctrlOut(0x03, div, 0);            // Set baud
+  await ctrlOut(0x04, 0x0008, 0);         // 8N1
+}
+
+async function connectUSB(){
+  if(!('usb' in navigator)){
+    alert('Trình duyệt không hỗ trợ WebUSB.\nHãy dùng Chrome Android + cáp OTG.');
+    return;
+  }
+  try{
+    usb = await navigator.usb.requestDevice({
+      filters:[
+        {vendorId:0x1A86},{vendorId:0x10C4},
+        {vendorId:0x0403},{vendorId:0x067B},
+      ]
+    });
+    await usb.open();
+    if(usb.configuration===null) await usb.selectConfiguration(1);
+    await usb.claimInterface(0);
+
+    const chipName = CHIPS[usb.vendorId]?.name || `VID ${usb.vendorId.toString(16)}`;
+    document.getElementById('chipInfo').textContent = `Chip: ${chipName}`;
+
+    // Init chip
+    try{
+      if(usb.vendorId===0x1A86) await initCH340(usb,0);
+      else if(usb.vendorId===0x10C4) await initCP210x(usb,0);
+      else if(usb.vendorId===0x0403) await initFTDI(usb,0);
+    }catch(e){ log('Init chip lỗi (bỏ qua): '+e.message,'err'); }
+
+    // Find bulk endpoints
+    const iface = usb.configuration.interfaces[0];
+    for(const ep of iface.alternate.endpoints){
+      if(ep.type==='bulk' && ep.direction==='in') epIn = ep;
+      if(ep.type==='bulk' && ep.direction==='out') epOut = ep;
+    }
+    if(!epIn || !epOut){
+      throw new Error('Không tìm thấy bulk endpoint');
+    }
+    ifaceNum = iface.interfaceNumber;
+
+    document.getElementById('dot').classList.add('on');
+    document.getElementById('btnConnect').disabled = true;
+    document.getElementById('btnDisconnect').disabled = false;
+    log(`✅ Đã kết nối ${chipName} @ ${document.getElementById('baud').value} baud`,'info');
+
+    keepReading = true;
+    readLoop();
+  }catch(e){
+    log('Lỗi kết nối: '+e.message,'err');
+    alert('Không kết nối được. Kiểm tra cáp OTG và driver.');
+  }
+}
+
+async function disconnectUSB(){
+  keepReading = false;
+  try{ if(usb){ await usb.close(); usb=null; epIn=null; epOut=null; } }catch(e){}
+  document.getElementById('dot').classList.remove('on');
+  document.getElementById('btnConnect').disabled = false;
+  document.getElementById('btnDisconnect').disabled = true;
+  log('Đã ngắt kết nối.','info');
+}
+
+async function readLoop(){
+  while(keepReading && usb){
+    try{
+      const res = await usb.transferIn(epIn.endpointNumber, 64);
+      if(res.data && res.data.byteLength){
+        const arr = new Uint8Array(res.data.buffer);
+        readBuf.push(...arr);
+        processBuf();
+      }
+    }catch(e){
+      if(keepReading) log('Read err: '+e.message,'err');
+      break;
+    }
+  }
+}
+
+function processBuf(){
+  const LEN = 7;
+  while(readBuf.length >= LEN){
+    const i = readBuf.indexOf(PROTO.START);
+    if(i<0){ readBuf=[]; return; }
+    if(i>0) readBuf = readBuf.slice(i);
+    if(readBuf.length<LEN) return;
+    const frame = readBuf.slice(0,LEN);
+    readBuf = readBuf.slice(LEN);
+    log('RX '+hex(frame),'rx');
+    const p = PROTO.parse(frame);
+    if(p) onResp(p);
+  }
+}
+
+function onResp({cmd,addr,value}){
+  for(const tab of ['basic','advanced','modes']){
+    const i = PARAMS[tab].findIndex(x=>x.a===addr);
+    if(i>=0){
+      const p = PARAMS[tab][i];
+      const disp = +(value * p.s).toFixed(2);
+      p.v = disp;
+      const el = document.getElementById(`v-${tab}-${i}`);
+      if(el) el.textContent = disp;
+      const inp = document.getElementById(`i-${tab}-${i}`);
+      if(inp && inp.style.borderColor) inp.style.borderColor = '';
+      if(pending.has(addr)){ pending.get(addr)(disp); pending.delete(addr); }
+      return;
+    }
+  }
+  const mp = MON.find(x=>x.a===addr);
+  if(mp){
+    const el = document.getElementById('t-'+mp.k);
+    if(el) el.textContent = (value*mp.s).toFixed(1);
+  }
+}
+
+async function send(bytes){
+  if(!usb) throw new Error('Chưa kết nối');
+  log('TX '+hex(bytes),'tx');
+  await usb.transferOut(epOut.endpointNumber, bytes);
+}
 
 /* ============================================================
-   UI HELPERS
+   4. UI
    ============================================================ */
 const $ = id => document.getElementById(id);
-const logEl = $('log');
-
-function log(msg, cls='info'){
-  const time = new Date().toLocaleTimeString('vi-VN');
-  const line = document.createElement('div');
-  line.className = 'log-line log-' + cls;
-  line.textContent = `[${time}] ${msg}`;
-  logEl.appendChild(line);
-  if($('autoScroll').checked) logEl.scrollTop = logEl.scrollHeight;
+function log(msg,cls=''){
+  const t = new Date().toLocaleTimeString('vi-VN');
+  const d = document.createElement('div');
+  d.className = 'l-'+cls;
+  d.textContent = `[${t}] ${msg}`;
+  $('log').appendChild(d);
+  $('log').scrollTop = $('log').scrollHeight;
 }
+function hex(a){ return Array.from(a).map(b=>b.toString(16).padStart(2,'0').toUpperCase()).join(' '); }
 
-function hex(arr){
-  return Array.from(arr).map(b => b.toString(16).padStart(2,'0').toUpperCase()).join(' ');
-}
-
-function setStatus(connected){
-  $('statusDot').classList.toggle('on', connected);
-  $('statusText').textContent = connected ? 'Đã kết nối' : 'Chưa kết nối';
-  $('btnConnect').disabled = connected;
-  $('btnDisconnect').disabled = !connected;
-}
-
-/* ============================================================
-   RENDER BẢNG THEO TAB
-   ============================================================ */
-function renderTable(tabKey, tbodyId){
-  const body = $(tbodyId);
-  body.innerHTML = '';
-  const params = DEFAULT_PARAMS[tabKey];
-  params.forEach((p, i) => {
-    const tr = document.createElement('tr');
-    const range = p.min !== undefined ? `${p.min} – ${p.max}` : '—';
-    tr.innerHTML = `
-      <td>${p.name}</td>
-      <td><input type="text" value="0x${p.addr.toString(16).toUpperCase().padStart(4,'0')}" data-tab="${tabKey}" data-i="${i}" data-f="addr" style="width:80px"></td>
-      <td class="val-read" style="color:var(--accent)">${p.value !== '' ? p.value : '—'}</td>
-      <td><input type="text" value="${p.newVal}" data-tab="${tabKey}" data-i="${i}" data-f="newVal" placeholder="..." style="width:80px"></td>
-      <td class="unit">${p.unit}</td>
-      <td class="unit" style="font-size:11px">${range}</td>
-    `;
-    body.appendChild(tr);
+function renderGrid(tab){
+  const c = $('grid-'+tab);
+  c.innerHTML = '';
+  PARAMS[tab].forEach((p,i)=>{
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.innerHTML = `
+      <label>${p.n} <span style="color:#5a6a7a">(0x${p.a.toString(16).toUpperCase()})</span></label>
+      <div class="val" id="v-${tab}-${i}">${p.v!==undefined?p.v:'—'}</div>
+      <input type="number" step="any" id="i-${tab}-${i}"
+             value="${p.nv||''}" placeholder="mới"
+             data-tab="${tab}" data-i="${i}">
+      <div style="font-size:10px;color:#5a6a7a">
+        ${p.u||''} · ${p.mn}→${p.mx}
+      </div>`;
+    c.appendChild(card);
   });
-
-  body.querySelectorAll('input').forEach(inp => {
-    inp.addEventListener('change', e => {
-      const tab = e.target.dataset.tab;
+  c.querySelectorAll('input').forEach(inp=>{
+    inp.addEventListener('input', e=>{
+      const t = e.target.dataset.tab;
       const i = +e.target.dataset.i;
-      const f = e.target.dataset.f;
-      if(f === 'addr'){
-        DEFAULT_PARAMS[tab][i].addr = parseInt(e.target.value, 16);
+      const p = PARAMS[t][i];
+      p.nv = e.target.value;
+      const v = parseFloat(e.target.value);
+      if(!isNaN(v) && (v<p.mn||v>p.mx)){
+        e.target.style.borderColor = 'var(--warn)';
       } else {
-        DEFAULT_PARAMS[tab][i][f] = e.target.value;
-        // Kiểm tra giới hạn
-        const p = DEFAULT_PARAMS[tab][i];
-        const val = parseFloat(e.target.value);
-        if(!isNaN(val) && (val < p.min || val > p.max)){
-          e.target.style.borderColor = 'var(--warn)';
-        } else {
-          e.target.style.borderColor = '';
-        }
+        e.target.style.borderColor = '';
       }
     });
   });
 }
 
-function updateReadCell(tabKey, index, value){
-  const tbodyId = 'tbody-' + tabKey;
-  const rows = $(tbodyId).querySelectorAll('tr');
-  if(rows[index]){
-    rows[index].querySelector('.val-read').textContent = value;
+async function readTab(tab){
+  log(`── Đọc ${tab} ──`,'');
+  for(const p of PARAMS[tab]){
+    try{ await send(PROTO.rd(p.a)); }catch(e){ log('ERR '+e.message,'err'); }
+    await new Promise(r=>setTimeout(r,180));
   }
 }
 
-/* ============================================================
-   SERIAL
-   ============================================================ */
-async function connect(){
-  if(!('serial' in navigator)){
-    log('Trình duyệt không hỗ trợ Web Serial. Dùng Chrome/Edge.', 'err');
-    alert('Trình duyệt không hỗ trợ Web Serial. Hãy dùng Chrome hoặc Edge.');
-    return;
-  }
-  try{
-    port = await navigator.serial.requestPort();
-    const baud = +$('baud').value;
-    await port.open({ baudRate: baud, dataBits: 8, stopBits: 1, parity: 'none' });
-    writer = port.writable.getWriter();
-    setStatus(true);
-    log(`Đã kết nối @ ${baud} baud — ${$('model').value}`, 'info');
-    keepReading = true;
-    readLoop();
-  }catch(err){
-    log('Lỗi kết nối: ' + err.message, 'err');
-  }
-}
-
-async function disconnect(){
-  keepReading = false;
-  monitorActive = false;
-  if(monitorInterval){ clearInterval(monitorInterval); monitorInterval = null; }
-  try{
-    if(reader){ await reader.cancel(); reader = null; }
-    if(writer){ writer.releaseLock(); writer = null; }
-    if(port){ await port.close(); port = null; }
-  }catch(e){ /* ignore */ }
-  setStatus(false);
-  log('Đã ngắt kết nối.', 'info');
-}
-
-async function readLoop(){
-  while(port && port.readable && keepReading){
-    reader = port.readable.getReader();
+async function writeTab(tab){
+  if(!confirm(`Ghi tất cả giá trị mới của tab "${tab}"?`)) return;
+  log(`── Ghi ${tab} ──`,'');
+  for(const p of PARAMS[tab]){
+    if(p.nv===''||p.nv===undefined) continue;
     try{
-      while(true){
-        const { value, done } = await reader.read();
-        if(done) break;
-        if(value){
-          readBuffer.push(...value);
-          processBuffer();
-        }
-      }
-    }catch(e){
-      if(keepReading) log('Lỗi đọc: ' + e.message, 'err');
-    }finally{
-      reader.releaseLock();
-    }
+      const raw = Math.round(parseFloat(p.nv) / p.s);
+      await send(PROTO.wr(p.a, raw));
+      await new Promise(r=>setTimeout(r,220));
+    }catch(e){ log('ERR '+p.n+': '+e.message,'err'); }
   }
 }
 
-function processBuffer(){
-  const FRAME_LEN = 7;
-  while(readBuffer.length >= FRAME_LEN){
-    const idx = readBuffer.indexOf(PROTO.START);
-    if(idx < 0){ readBuffer = []; return; }
-    if(idx > 0){ readBuffer = readBuffer.slice(idx); }
-    if(readBuffer.length < FRAME_LEN) return;
-
-    const frame = readBuffer.slice(0, FRAME_LEN);
-    readBuffer = readBuffer.slice(FRAME_LEN);
-
-    log('RX: ' + hex(frame), 'rx');
-    const parsed = PROTO.parseResponse(frame);
-    if(parsed){
-      handleResponse(parsed);
+/* Monitor */
+let monTimer=null;
+function startMon(){
+  if(monTimer) return;
+  $('btnStartMon').disabled = true;
+  $('btnStopMon').disabled = false;
+  log('▶ Bắt đầu monitor','');
+  monTimer = setInterval(async ()=>{
+    if(!usb) return;
+    for(const m of MON){
+      try{ await send(PROTO.rd(m.a)); await new Promise(r=>setTimeout(r,40)); }catch(e){}
     }
-  }
+  }, 1200);
+}
+function stopMon(){
+  if(monTimer){ clearInterval(monTimer); monTimer=null; }
+  $('btnStartMon').disabled = false;
+  $('btnStopMon').disabled = true;
+  log('⏹ Dừng monitor','');
 }
 
-function handleResponse({cmd, addr, value}){
-  // Tìm trong tất cả các tab
-  for(const tabKey of ['basic','advanced','modes']){
-    const i = DEFAULT_PARAMS[tabKey].findIndex(p => p.addr === addr);
-    if(i >= 0){
-      const p = DEFAULT_PARAMS[tabKey][i];
-      const scale = p.scale || 1;
-      const display = +(value * scale).toFixed(2);
-      p.value = display;
-      updateReadCell(tabKey, i, display);
-      log(`  → ${p.name} = ${display} ${p.unit}`, 'info');
-      if(pendingReads.has(addr)){
-        pendingReads.get(addr)(display);
-        pendingReads.delete(addr);
-      }
-      return;
-    }
-  }
-  // Kiểm tra monitor
-  const mp = MONITOR_PARAMS.find(p => p.addr === addr);
-  if(mp){
-    updateTelemetry(mp.key, value * mp.scale);
-  }
-}
-
-async function send(bytes){
-  if(!writer) throw new Error('Chưa kết nối');
-  log('TX: ' + hex(bytes), 'tx');
-  await writer.write(bytes);
-}
-
-/* ============================================================
-   ACTIONS
-   ============================================================ */
-async function readTab(tabKey){
-  log(`── Đọc tab ${tabKey} ──`, 'info');
-  const params = DEFAULT_PARAMS[tabKey];
-  for(let i = 0; i < params.length; i++){
-    try{
-      const frame = PROTO.buildRead(params[i].addr);
-      await send(frame);
-      await new Promise(r => setTimeout(r, 150));
-    }catch(e){
-      log('Lỗi đọc: ' + e.message, 'err');
-    }
-  }
-  log('── Xong ──', 'info');
-}
-
-async function writeTab(tabKey){
-  if(!confirm(`Ghi tất cả giá trị mới trong tab ${tabKey}?`)) return;
-  log(`── Ghi tab ${tabKey} ──`, 'info');
-  const params = DEFAULT_PARAMS[tabKey];
-  for(let i = 0; i < params.length; i++){
-    const p = params[i];
-    if(p.newVal === '' || p.newVal === null) continue;
-    try{
-      const scale = p.scale || 1;
-      const raw = Math.round(parseFloat(p.newVal) / scale);
-      const frame = PROTO.buildWrite(p.addr, raw);
-      await send(frame);
-      log(`  → Ghi ${p.name} = ${p.newVal} ${p.unit}`, 'info');
-      await new Promise(r => setTimeout(r, 200));
-    }catch(e){
-      log(`Lỗi ghi ${p.name}: ${e.message}`, 'err');
-    }
-  }
-  log('── Xong ──', 'info');
-}
-
-/* ============================================================
-   MONITOR
-   ============================================================ */
-function updateTelemetry(key, value){
-  const el = $('tel-' + key);
-  if(el) el.textContent = typeof value === 'number' ? value.toFixed(1) : value;
-}
-
-function startMonitor(){
-  if(monitorActive) return;
-  monitorActive = true;
-  $('btnStartMonitor').disabled = true;
-  $('btnStopMonitor').disabled = false;
-  log('Bắt đầu giám sát...', 'info');
-
-  monitorInterval = setInterval(async () => {
-    if(!writer || !monitorActive) return;
-    for(const mp of MONITOR_PARAMS){
-      try{
-        const frame = PROTO.buildRead(mp.addr);
-        await send(frame);
-        await new Promise(r => setTimeout(r, 50));
-      }catch(e){ /* ignore */ }
-    }
-  }, 1000);
-}
-
-function stopMonitor(){
-  monitorActive = false;
-  if(monitorInterval){ clearInterval(monitorInterval); monitorInterval = null; }
-  $('btnStartMonitor').disabled = false;
-  $('btnStopMonitor').disabled = true;
-  log('Đã dừng giám sát.', 'info');
-}
-
-/* ============================================================
-   BULK IMPORT / EXPORT
-   ============================================================ */
-function exportCSV(){
-  let csv = 'Tab,Name,Address,Value,Unit\n';
-  for(const tabKey of ['basic','advanced','modes']){
-    for(const p of DEFAULT_PARAMS[tabKey]){
-      csv += `${tabKey},"${p.name}","0x${p.addr.toString(16).toUpperCase()}","${p.value || ''}","${p.unit}"\n`;
-    }
-  }
-  const blob = new Blob([csv], { type: 'text/csv' });
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = `votol-config-${Date.now()}.csv`;
-  a.click();
-  log('Đã xuất CSV.', 'info');
-}
-
-function importCSV(file){
-  const r = new FileReader();
-  r.onload = e => {
-    const lines = e.target.result.split('\n').slice(1);
-    let count = 0;
-    for(const line of lines){
-      const parts = line.split(',').map(s => s.replace(/"/g,'').trim());
-      if(parts.length < 4) continue;
-      const [tab, name, addr, value] = parts;
-      if(!DEFAULT_PARAMS[tab]) continue;
-      const p = DEFAULT_PARAMS[tab].find(x => x.name === name);
-      if(p){
-        p.newVal = value;
-        count++;
-      }
-    }
-    // Re-render tất cả
-    renderTable('basic','tbody-basic');
-    renderTable('advanced','tbody-advanced');
-    renderTable('modes','tbody-modes');
-    log(`Đã nhập ${count} giá trị từ CSV.`, 'info');
-  };
-  r.readAsText(file);
-}
-
-function applyBulk(){
-  const txt = $('bulkText').value.trim();
-  if(!txt){ log('Chưa có dữ liệu để áp dụng.', 'err'); return; }
-  const lines = txt.split('\n');
-  let count = 0;
-  for(const line of lines){
-    const parts = line.split(',').map(s => s.trim());
-    if(parts.length < 2) continue;
-    const [name, val] = parts;
-    for(const tabKey of ['basic','advanced','modes']){
-      const p = DEFAULT_PARAMS[tabKey].find(x => x.name.toLowerCase() === name.toLowerCase());
-      if(p){
-        p.newVal = val;
-        count++;
-        break;
-      }
-    }
-  }
-  renderTable('basic','tbody-basic');
-  renderTable('advanced','tbody-advanced');
-  renderTable('modes','tbody-modes');
-  log(`Đã áp dụng ${count} giá trị từ ô nhập hàng loạt.`, 'info');
-}
-
-/* ============================================================
-   RAW COMMAND
-   ============================================================ */
-async function sendRaw(){
-  const txt = $('rawCmd').value.trim();
-  if(!txt) return;
-  const bytes = txt.split(/\s+/).map(h => parseInt(h, 16));
-  if(bytes.some(isNaN)){ log('Hex không hợp lệ.', 'err'); return; }
-  try{ await send(new Uint8Array(bytes)); }
-  catch(e){ log('Lỗi gửi: ' + e.message, 'err'); }
-}
-
-/* ============================================================
-   TABS
-   ============================================================ */
-document.querySelectorAll('.tab').forEach(tab => {
-  tab.addEventListener('click', () => {
-    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-    tab.classList.add('active');
-    const target = tab.dataset.tab;
-    $('tab-' + target).classList.add('active');
+/* Tabs */
+document.querySelectorAll('.tab').forEach(t=>{
+  t.addEventListener('click',()=>{
+    document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(x=>x.classList.remove('active'));
+    t.classList.add('active');
+    $('tab-'+t.dataset.tab).classList.add('active');
   });
 });
 
-/* ============================================================
-   BINDINGS
-   ============================================================ */
-$('btnConnect').addEventListener('click', connect);
-$('btnDisconnect').addEventListener('click', disconnect);
-$('btnReadBasic').addEventListener('click', () => readTab('basic'));
-$('btnWriteBasic').addEventListener('click', () => writeTab('basic'));
-$('btnReadAdvanced').addEventListener('click', () => readTab('advanced'));
-$('btnWriteAdvanced').addEventListener('click', () => writeTab('advanced'));
-$('btnReadModes').addEventListener('click', () => readTab('modes'));
-$('btnWriteModes').addEventListener('click', () => writeTab('modes'));
-$('btnStartMonitor').addEventListener('click', startMonitor);
-$('btnStopMonitor').addEventListener('click', stopMonitor);
-$('btnExportCSV').addEventListener('click', exportCSV);
-$('btnImportCSV').addEventListener('click', () => $('csvInput').click());
-$('csvInput').addEventListener('change', e => {
-  if(e.target.files[0]) importCSV(e.target.files[0]);
+/* Bindings */
+$('btnConnect').addEventListener('click', connectUSB);
+$('btnDisconnect').addEventListener('click', disconnectUSB);
+$('rdBasic').addEventListener('click', ()=>readTab('basic'));
+$('wrBasic').addEventListener('click', ()=>writeTab('basic'));
+$('rdAdv').addEventListener('click', ()=>readTab('advanced'));
+$('wrAdv').addEventListener('click', ()=>writeTab('advanced'));
+$('rdModes').addEventListener('click', ()=>readTab('modes'));
+$('wrModes').addEventListener('click', ()=>writeTab('modes'));
+$('btnStartMon').addEventListener('click', startMon);
+$('btnStopMon').addEventListener('click', stopMon);
+$('btnClearLog').addEventListener('click', ()=>$('log').innerHTML='');
+$('btnRaw').addEventListener('click', async ()=>{
+  const t = $('rawCmd').value.trim();
+  if(!t) return;
+  const b = t.split(/\s+/).map(x=>parseInt(x,16));
+  if(b.some(isNaN)){ log('Hex sai','err'); return; }
+  try{ await send(new Uint8Array(b)); }catch(e){ log(e.message,'err'); }
 });
-$('btnApplyBulk').addEventListener('click', applyBulk);
-$('btnRawSend').addEventListener('click', sendRaw);
-$('btnClearLog').addEventListener('click', () => logEl.innerHTML = '');
 
-// Khởi tạo
-renderTable('basic','tbody-basic');
-renderTable('advanced','tbody-advanced');
-renderTable('modes','tbody-modes');
-log('Sẵn sàng. Cắm cáp USB và bấm "Kết nối USB".', 'info');
-log('Sửa đối tượng PROTO nếu protocol firmware khác.', 'info');
+/* Init */
+renderGrid('basic');
+renderGrid('advanced');
+renderGrid('modes');
+log('Sẵn sàng. Cắm cáp OTG + cáp USB VOTOL rồi bấm "Kết nối".','');
+log('Lưu ý: iPhone không hỗ trợ — cần Android + Chrome.','');
 </script>
 </body>
 </html>
