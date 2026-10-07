@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
-<title>VOTOL Tuner Mobile</title>
+<title>VOTOL Tuner Pro — Verify</title>
 <style>
   :root{
     --bg:#0f1419;--panel:#1a212b;--line:#2a3340;
@@ -36,10 +36,11 @@
   .row button{flex:0 0 auto}
   .grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
   .card{background:#0d1218;border:1px solid var(--line);border-radius:8px;
-    padding:10px;display:flex;flex-direction:column;gap:6px}
+    padding:10px;display:flex;flex-direction:column;gap:6px;position:relative}
   .card label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
   .card .val{font-size:13px;color:var(--accent);font-family:ui-monospace,monospace;min-height:16px}
   .card input{font-size:14px;padding:7px 9px;text-align:center;font-family:ui-monospace,monospace}
+  .card .badge-verify{position:absolute;top:8px;right:8px;font-size:14px}
   .tabs{display:flex;gap:2px;margin-bottom:12px;overflow-x:auto;padding-bottom:2px}
   .tab{flex:0 0 auto;padding:9px 14px;border:1px solid var(--line);background:transparent;
     color:var(--muted);border-radius:8px;font-size:12px;white-space:nowrap}
@@ -55,25 +56,30 @@
     height:200px;overflow-y:auto;font-family:ui-monospace,monospace;font-size:11px;
     white-space:pre-wrap;word-break:break-all;color:var(--muted)}
   .l-tx{color:var(--accent)}.l-rx{color:var(--ok)}.l-err{color:var(--err)}
+  .l-ok{color:var(--ok);font-weight:700}.l-fail{color:var(--err);font-weight:700}
   .hint{font-size:11px;color:var(--muted);margin-top:6px;line-height:1.4}
   .tag{display:inline-block;font-size:10px;padding:2px 7px;border-radius:10px;
     background:var(--line);color:var(--muted);margin-left:6px}
   .warnbox{background:#2a1f0a;border:1px solid #5a4a1a;color:#fbbf24;
     padding:10px;border-radius:8px;font-size:12px;margin-bottom:12px;line-height:1.5}
+  .verify-log{background:#0a1f0a;border:1px solid #1a5a1a;color:#86efac;
+    padding:8px;border-radius:6px;font-size:11px;margin-top:6px;
+    font-family:ui-monospace,monospace;max-height:120px;overflow-y:auto}
 </style>
 </head>
 <body>
 
 <header>
-  <h1>⚡ VOTOL <span>Tuner</span></h1>
-  <span class="tag">Mobile</span>
+  <h1>⚡ VOTOL <span>Tuner Pro</span></h1>
+  <span class="tag">Verify</span>
   <span id="dot" class="dot"></span>
 </header>
 
 <main>
 
 <div class="warnbox">
-  📱 <b>Yêu cầu:</b> Chrome Android + cáp USB-serial (CH340/CP2102/FTDI) + đầu chuyển OTG. iPhone không hỗ trợ.
+  📱 <b>Yêu cầu:</b> Chrome Android + cáp USB-serial (CH340/CP2102/FTDI) + đầu chuyển OTG.<br>
+  ✅ <b>Xác minh tự động:</b> Tool sẽ đọc lại thông số ngay sau khi ghi để đảm bảo giá trị đã được lưu đúng.
 </div>
 
 <!-- KẾT NỐI -->
@@ -110,6 +116,7 @@
   <button class="tab" data-tab="advanced">Nâng cao</button>
   <button class="tab" data-tab="modes">Chế độ lái</button>
   <button class="tab" data-tab="monitor">Giám sát</button>
+  <button class="tab" data-tab="verify">🔍 Xác minh</button>
   <button class="tab" data-tab="log">Log</button>
 </div>
 
@@ -119,7 +126,7 @@
     <h2>Thông số hệ thống</h2>
     <div class="row" style="margin-bottom:10px">
       <button id="rdBasic">📥 Đọc tab</button>
-      <button id="wrBasic" class="danger">📤 Ghi tab</button>
+      <button id="wrBasic" class="danger">📤 Ghi & Xác minh</button>
     </div>
     <div id="grid-basic" class="grid" style="grid-template-columns:1fr"></div>
   </section>
@@ -131,7 +138,7 @@
     <h2>Thông số nâng cao</h2>
     <div class="row" style="margin-bottom:10px">
       <button id="rdAdv">📥 Đọc tab</button>
-      <button id="wrAdv" class="danger">📤 Ghi tab</button>
+      <button id="wrAdv" class="danger">📤 Ghi & Xác minh</button>
     </div>
     <div id="grid-advanced" class="grid" style="grid-template-columns:1fr"></div>
   </section>
@@ -143,7 +150,7 @@
     <h2>Chế độ lái</h2>
     <div class="row" style="margin-bottom:10px">
       <button id="rdModes">📥 Đọc tab</button>
-      <button id="wrModes" class="danger">📤 Ghi tab</button>
+      <button id="wrModes" class="danger">📤 Ghi & Xác minh</button>
     </div>
     <div id="grid-modes" class="grid" style="grid-template-columns:1fr"></div>
   </section>
@@ -168,6 +175,22 @@
   </section>
 </div>
 
+<!-- TAB XÁC MINH -->
+<div id="tab-verify" class="tab-content">
+  <section class="panel">
+    <h2>Lịch sử xác minh</h2>
+    <div class="row" style="margin-bottom:10px">
+      <button id="btnClearVerify">Xóa lịch sử</button>
+      <button id="btnExportVerify">📄 Xuất CSV</button>
+    </div>
+    <div id="verifyLog" class="verify-log">Chưa có xác minh nào.</div>
+    <div class="hint" style="margin-top:8px">
+      Mỗi dòng ghi: <b>Tên tham số</b> | Giá trị gửi | Giá trị đọc về | Kết quả<br>
+      ✅ = Khớp hoàn toàn · ⚠️ = Lệch nhỏ (≤1 đơn vị) · ❌ = Không khớp
+    </div>
+  </section>
+</div>
+
 <!-- TAB LOG -->
 <div id="tab-log" class="tab-content">
   <section class="panel">
@@ -188,7 +211,7 @@
 
 <script>
 /* ============================================================
-   1. THAM SỐ (giống bản desktop)
+   1. THAM SỐ
    ============================================================ */
 const PARAMS = {
   basic: [
@@ -260,21 +283,19 @@ const CHIPS = {
   0x067B:{name:'PL2303'},
 };
 
-/* --- CH340 init (theo driver Linux ch34x.c) --- */
 async function initCH340(dev, iface){
   const baud = +document.getElementById('baud').value;
   const reg = CHIPS[0x1A86].baudReg[baud] || 0xCC;
   const ctrlOut = (req,val,idx)=>dev.controlTransferOut({
     requestType:'vendor', recipient:'device', request:req, value:val, index:idx
   });
-  await ctrlOut(0xA1, 0, 0);              // Reset
-  await ctrlOut(0x9A, 0x1312, reg);       // Baud low
-  await ctrlOut(0x9A, 0x1313, 0x00);      // Baud high
-  await ctrlOut(0x9A, 0x0F2C, 0x0008);    // Prescaler
-  await ctrlOut(0x9A, 0x2518, 0x00C3);    // Line control 8N1
+  await ctrlOut(0xA1, 0, 0);
+  await ctrlOut(0x9A, 0x1312, reg);
+  await ctrlOut(0x9A, 0x1313, 0x00);
+  await ctrlOut(0x9A, 0x0F2C, 0x0008);
+  await ctrlOut(0x9A, 0x2518, 0x00C3);
 }
 
-/* --- CP210x init --- */
 async function initCP210x(dev, iface){
   const baud = +document.getElementById('baud').value;
   const clk = 3686400;
@@ -282,29 +303,24 @@ async function initCP210x(dev, iface){
   const ctrlOut = (req,val,idx)=>dev.controlTransferOut({
     requestType:'vendor', recipient:'interface', request:req, value:val, index:idx
   });
-  // Reset & enable
-  await ctrlOut(0x00, 0x0001, 0);       // IFC_ENABLE
-  await ctrlOut(0x00, 0x0303, iface);   // UART enable
-  // Set baud via register write
-  await ctrlOut(0x1E, 0x0000, (div & 0xFF) | 0x0100);       // reg 0 = low
-  await ctrlOut(0x1E, 0x0000, ((div >> 8) & 0xFF) | 0x0100); // reg 1 = high
-  // Line control: 8N1
-  await ctrlOut(0x1E, 0x0000, 0x0300 | 0x08);                // 8N1
+  await ctrlOut(0x00, 0x0001, 0);
+  await ctrlOut(0x00, 0x0303, iface);
+  await ctrlOut(0x1E, 0x0000, (div & 0xFF) | 0x0100);
+  await ctrlOut(0x1E, 0x0000, ((div >> 8) & 0xFF) | 0x0100);
+  await ctrlOut(0x1E, 0x0000, 0x0300 | 0x08);
 }
 
-/* --- FTDI init --- */
 async function initFTDI(dev, iface){
   const baud = +document.getElementById('baud').value;
   const ctrlOut = (req,val,idx)=>dev.controlTransferOut({
     requestType:'vendor', recipient:'device', request:req, value:val, index:idx
   });
-  await ctrlOut(0x00, 0, 0);              // Reset
-  await ctrlOut(0x00, 1, 0);              // Purge RX
-  await ctrlOut(0x00, 2, 0);              // Purge TX
-  // Baud divisor: 48MHz / 16 / baud = 3000000 / baud
+  await ctrlOut(0x00, 0, 0);
+  await ctrlOut(0x00, 1, 0);
+  await ctrlOut(0x00, 2, 0);
   const div = Math.round(3000000 / baud);
-  await ctrlOut(0x03, div, 0);            // Set baud
-  await ctrlOut(0x04, 0x0008, 0);         // 8N1
+  await ctrlOut(0x03, div, 0);
+  await ctrlOut(0x04, 0x0008, 0);
 }
 
 async function connectUSB(){
@@ -326,28 +342,24 @@ async function connectUSB(){
     const chipName = CHIPS[usb.vendorId]?.name || `VID ${usb.vendorId.toString(16)}`;
     document.getElementById('chipInfo').textContent = `Chip: ${chipName}`;
 
-    // Init chip
     try{
       if(usb.vendorId===0x1A86) await initCH340(usb,0);
       else if(usb.vendorId===0x10C4) await initCP210x(usb,0);
       else if(usb.vendorId===0x0403) await initFTDI(usb,0);
     }catch(e){ log('Init chip lỗi (bỏ qua): '+e.message,'err'); }
 
-    // Find bulk endpoints
     const iface = usb.configuration.interfaces[0];
     for(const ep of iface.alternate.endpoints){
       if(ep.type==='bulk' && ep.direction==='in') epIn = ep;
       if(ep.type==='bulk' && ep.direction==='out') epOut = ep;
     }
-    if(!epIn || !epOut){
-      throw new Error('Không tìm thấy bulk endpoint');
-    }
+    if(!epIn || !epOut) throw new Error('Không tìm thấy bulk endpoint');
     ifaceNum = iface.interfaceNumber;
 
     document.getElementById('dot').classList.add('on');
     document.getElementById('btnConnect').disabled = true;
     document.getElementById('btnDisconnect').disabled = false;
-    log(`✅ Đã kết nối ${chipName} @ ${document.getElementById('baud').value} baud`,'info');
+    log(`✅ Đã kết nối ${chipName} @ ${document.getElementById('baud').value} baud`,'ok');
 
     keepReading = true;
     readLoop();
@@ -363,7 +375,7 @@ async function disconnectUSB(){
   document.getElementById('dot').classList.remove('on');
   document.getElementById('btnConnect').disabled = false;
   document.getElementById('btnDisconnect').disabled = true;
-  log('Đã ngắt kết nối.','info');
+  log('Đã ngắt kết nối.','');
 }
 
 async function readLoop(){
@@ -426,7 +438,7 @@ async function send(bytes){
 }
 
 /* ============================================================
-   4. UI
+   4. UI + XÁC MINH
    ============================================================ */
 const $ = id => document.getElementById(id);
 function log(msg,cls=''){
@@ -438,6 +450,20 @@ function log(msg,cls=''){
   $('log').scrollTop = $('log').scrollHeight;
 }
 function hex(a){ return Array.from(a).map(b=>b.toString(16).padStart(2,'0').toUpperCase()).join(' '); }
+
+let verifyHistory = [];
+
+function addVerify(name, sent, readBack, ok){
+  const icon = ok ? '✅' : '❌';
+  const cls = ok ? 'l-ok' : 'l-fail';
+  const line = `${icon} ${name} | Gửi: ${sent} | Đọc: ${readBack} | ${ok ? 'THÀNH CÔNG' : 'THẤT BẠI'}`;
+  verifyHistory.push(line);
+  const el = $('verifyLog');
+  if(el.textContent.startsWith('Chưa')) el.textContent = '';
+  el.textContent += line + '\n';
+  el.scrollTop = el.scrollHeight;
+  log(line, cls);
+}
 
 function renderGrid(tab){
   const c = $('grid-'+tab);
@@ -480,17 +506,48 @@ async function readTab(tab){
   }
 }
 
-async function writeTab(tab){
-  if(!confirm(`Ghi tất cả giá trị mới của tab "${tab}"?`)) return;
-  log(`── Ghi ${tab} ──`,'');
+/* ============================================================
+   GHI + XÁC MINH (READ-BACK VERIFICATION)
+   ============================================================ */
+async function writeTabVerify(tab){
+  if(!confirm(`Ghi tất cả giá trị mới của tab "${tab}" VÀ xác minh?`)) return;
+  log(`══ BẮT ĐẦU GHI + XÁC MINH: ${tab} ══`,'');
+  let okCount = 0, failCount = 0;
+
   for(const p of PARAMS[tab]){
     if(p.nv===''||p.nv===undefined) continue;
+
+    const sentVal = parseFloat(p.nv);
+    const raw = Math.round(sentVal / p.s);
+
     try{
-      const raw = Math.round(parseFloat(p.nv) / p.s);
+      // BƯỚC 1: Ghi
       await send(PROTO.wr(p.a, raw));
-      await new Promise(r=>setTimeout(r,220));
-    }catch(e){ log('ERR '+p.n+': '+e.message,'err'); }
+      await new Promise(r=>setTimeout(r,250));
+
+      // BƯỚC 2: Đọc lại để xác minh
+      const readVal = await new Promise((resolve, reject)=>{
+        const timeout = setTimeout(()=>reject(new Error('Timeout đọc lại')), 1500);
+        pending.set(p.a, (v)=>{ clearTimeout(timeout); resolve(v); });
+        send(PROTO.rd(p.a)).catch(reject);
+      });
+
+      // BƯỚC 3: So sánh
+      const diff = Math.abs(readVal - sentVal);
+      const ok = diff <= (p.s >= 1 ? 1 : 0.15);
+
+      if(ok){ okCount++; addVerify(p.n, sentVal, readVal, true); }
+      else { failCount++; addVerify(p.n, sentVal, readVal, false); }
+
+      await new Promise(r=>setTimeout(r,200));
+    }catch(e){
+      failCount++;
+      addVerify(p.n, sentVal, 'LỖI: '+e.message, false);
+    }
   }
+
+  log(`══ KẾT THÚC: ${okCount} thành công / ${failCount} thất bại ══`, failCount?'fail':'ok');
+  if(failCount>0) alert(`⚠️ ${failCount} thông số không được xác nhận! Kiểm tra tab Xác minh.`);
 }
 
 /* Monitor */
@@ -528,14 +585,22 @@ document.querySelectorAll('.tab').forEach(t=>{
 $('btnConnect').addEventListener('click', connectUSB);
 $('btnDisconnect').addEventListener('click', disconnectUSB);
 $('rdBasic').addEventListener('click', ()=>readTab('basic'));
-$('wrBasic').addEventListener('click', ()=>writeTab('basic'));
+$('wrBasic').addEventListener('click', ()=>writeTabVerify('basic'));
 $('rdAdv').addEventListener('click', ()=>readTab('advanced'));
-$('wrAdv').addEventListener('click', ()=>writeTab('advanced'));
+$('wrAdv').addEventListener('click', ()=>writeTabVerify('advanced'));
 $('rdModes').addEventListener('click', ()=>readTab('modes'));
-$('wrModes').addEventListener('click', ()=>writeTab('modes'));
+$('wrModes').addEventListener('click', ()=>writeTabVerify('modes'));
 $('btnStartMon').addEventListener('click', startMon);
 $('btnStopMon').addEventListener('click', stopMon);
 $('btnClearLog').addEventListener('click', ()=>$('log').innerHTML='');
+$('btnClearVerify').addEventListener('click', ()=>{ verifyHistory=[]; $('verifyLog').textContent='Chưa có xác minh nào.'; });
+$('btnExportVerify').addEventListener('click', ()=>{
+  const blob = new Blob([verifyHistory.join('\n')], {type:'text/plain'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `votol-verify-${Date.now()}.txt`;
+  a.click();
+});
 $('btnRaw').addEventListener('click', async ()=>{
   const t = $('rawCmd').value.trim();
   if(!t) return;
@@ -549,7 +614,7 @@ renderGrid('basic');
 renderGrid('advanced');
 renderGrid('modes');
 log('Sẵn sàng. Cắm cáp OTG + cáp USB VOTOL rồi bấm "Kết nối".','');
-log('Lưu ý: iPhone không hỗ trợ — cần Android + Chrome.','');
+log('Nút "Ghi & Xác minh" sẽ tự động đọc lại thông số sau khi ghi.','');
 </script>
 </body>
 </html>
