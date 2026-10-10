@@ -2,619 +2,1143 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
-<title>VOTOL Tuner Pro — Verify</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>WebOS — Máy tính ảo</title>
 <style>
-  :root{
-    --bg:#0f1419;--panel:#1a212b;--line:#2a3340;
-    --txt:#e6edf3;--muted:#8b98a5;--accent:#00d4ff;
-    --ok:#22c55e;--warn:#f59e0b;--err:#ef4444;
-  }
-  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-  body{margin:0;font-family:system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--txt);font-size:14px}
-  header{padding:12px 14px;background:var(--panel);border-bottom:1px solid var(--line);
-    display:flex;align-items:center;gap:8px;position:sticky;top:0;z-index:100}
-  header h1{margin:0;font-size:15px;font-weight:600}
-  header h1 span{color:var(--accent)}
-  .dot{width:9px;height:9px;border-radius:50%;background:var(--err);margin-left:auto;transition:.3s}
-  .dot.on{background:var(--ok);box-shadow:0 0 8px var(--ok)}
-  main{padding:12px;max-width:900px;margin:0 auto;padding-bottom:80px}
-  .panel{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px;margin-bottom:12px}
-  .panel h2{margin:0 0 10px;font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);font-weight:600}
-  button{background:var(--line);color:var(--txt);border:1px solid #334152;
-    padding:10px 14px;border-radius:8px;cursor:pointer;font-size:13px;font-weight:500;transition:.15s}
-  button:active:not(:disabled){transform:scale(.97)}
-  button:disabled{opacity:.4}
-  button.primary{background:var(--accent);color:#001824;border-color:var(--accent);font-weight:700}
-  button.danger{border-color:#7a3a3a;color:#ff8f8f}
-  button.wide{width:100%;padding:14px;font-size:15px}
-  select,input,textarea{background:#0d1218;color:var(--txt);border:1px solid var(--line);
-    padding:9px 10px;border-radius:7px;font-size:13px;font-family:inherit;width:100%}
-  input:focus,select:focus{outline:none;border-color:var(--accent)}
-  .row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
-  .row>*{flex:1;min-width:0}
-  .row button{flex:0 0 auto}
-  .grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
-  .card{background:#0d1218;border:1px solid var(--line);border-radius:8px;
-    padding:10px;display:flex;flex-direction:column;gap:6px;position:relative}
-  .card label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
-  .card .val{font-size:13px;color:var(--accent);font-family:ui-monospace,monospace;min-height:16px}
-  .card input{font-size:14px;padding:7px 9px;text-align:center;font-family:ui-monospace,monospace}
-  .card .badge-verify{position:absolute;top:8px;right:8px;font-size:14px}
-  .tabs{display:flex;gap:2px;margin-bottom:12px;overflow-x:auto;padding-bottom:2px}
-  .tab{flex:0 0 auto;padding:9px 14px;border:1px solid var(--line);background:transparent;
-    color:var(--muted);border-radius:8px;font-size:12px;white-space:nowrap}
-  .tab.active{background:var(--accent);color:#001824;border-color:var(--accent);font-weight:700}
-  .tab-content{display:none}
-  .tab-content.active{display:block}
-  .tel-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-  .tel{background:#0d1218;border:1px solid var(--line);border-radius:8px;padding:10px;text-align:center}
-  .tel .lbl{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
-  .tel .num{font-size:17px;font-weight:700;color:var(--accent);font-family:ui-monospace,monospace;margin-top:3px}
-  .tel .un{font-size:10px;color:var(--muted)}
-  #log{background:#080b0f;border:1px solid var(--line);border-radius:8px;padding:10px;
-    height:200px;overflow-y:auto;font-family:ui-monospace,monospace;font-size:11px;
-    white-space:pre-wrap;word-break:break-all;color:var(--muted)}
-  .l-tx{color:var(--accent)}.l-rx{color:var(--ok)}.l-err{color:var(--err)}
-  .l-ok{color:var(--ok);font-weight:700}.l-fail{color:var(--err);font-weight:700}
-  .hint{font-size:11px;color:var(--muted);margin-top:6px;line-height:1.4}
-  .tag{display:inline-block;font-size:10px;padding:2px 7px;border-radius:10px;
-    background:var(--line);color:var(--muted);margin-left:6px}
-  .warnbox{background:#2a1f0a;border:1px solid #5a4a1a;color:#fbbf24;
-    padding:10px;border-radius:8px;font-size:12px;margin-bottom:12px;line-height:1.5}
-  .verify-log{background:#0a1f0a;border:1px solid #1a5a1a;color:#86efac;
-    padding:8px;border-radius:6px;font-size:11px;margin-top:6px;
-    font-family:ui-monospace,monospace;max-height:120px;overflow-y:auto}
+:root{
+  --accent:#4f8cff;
+  --bg-win:rgba(28,32,44,.93);
+  --titlebar:rgba(44,50,66,.96);
+  --text:#e8ecf4;
+  --sub:#98a2b8;
+  --border:rgba(255,255,255,.09);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%;overflow:hidden;font-family:'Segoe UI',system-ui,-apple-system,sans-serif;color:var(--text);background:#000}
+button{font-family:inherit;cursor:pointer;border:none;outline:none}
+
+/* ===== DESKTOP ===== */
+#desktop{position:fixed;inset:0;transition:background .5s}
+#desktop.wp0{background:linear-gradient(135deg,#0f2027,#203a43,#2c5364)}
+#desktop.wp1{background:linear-gradient(135deg,#1e3c72,#2a5298,#6b46c1)}
+#desktop.wp2{background:linear-gradient(135deg,#42275a,#734b6d)}
+#desktop.wp3{background:linear-gradient(135deg,#0b486b,#f56217)}
+#desktop.wp4{background:linear-gradient(135deg,#134e5e,#71b280)}
+#desktop::after{content:'';position:absolute;inset:0;background:radial-gradient(circle at 70% 20%,rgba(255,255,255,.08),transparent 60%);pointer-events:none}
+
+#desktop-icons{position:absolute;top:16px;left:16px;display:flex;flex-direction:column;flex-wrap:wrap;gap:6px;max-height:calc(100vh - 130px);z-index:1}
+.desk-icon{width:92px;padding:10px 4px;border-radius:10px;text-align:center;cursor:pointer;font-size:12px;transition:.15s;user-select:none;border:1px solid transparent}
+.desk-icon:hover{background:rgba(255,255,255,.13);border-color:rgba(255,255,255,.15)}
+.desk-icon:active{transform:scale(.95)}
+.desk-icon .ic{font-size:32px;display:block;margin-bottom:6px;filter:drop-shadow(0 2px 4px rgba(0,0,0,.5))}
+
+/* ===== WINDOWS ===== */
+#windows-layer{position:fixed;inset:0 0 52px 0;pointer-events:none;z-index:10}
+.window{position:absolute;pointer-events:auto;background:var(--bg-win);border:1px solid var(--border);border-radius:12px;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 24px 70px rgba(0,0,0,.65);backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);animation:winIn .16s ease}
+@keyframes winIn{from{opacity:0;transform:scale(.96) translateY(8px)}to{opacity:1;transform:none}}
+.window.minimized{display:none}
+.window.maximized{border-radius:0!important;left:0!important;top:0!important;width:100%!important;height:100%!important}
+.title-bar{height:38px;background:var(--titlebar);display:flex;align-items:center;justify-content:space-between;padding:0 4px 0 12px;flex-shrink:0;border-bottom:1px solid var(--border);user-select:none}
+.window.maximized .title-bar{cursor:default}
+.title{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:500;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;pointer-events:none}
+.title .app-icon{font-size:15px}
+.win-controls{display:flex;gap:2px}
+.win-controls button{width:34px;height:30px;background:transparent;color:var(--sub);border-radius:6px;font-size:13px;transition:.12s;line-height:1}
+.win-controls button:hover{background:rgba(255,255,255,.12);color:#fff}
+.win-controls .btn-close:hover{background:#e5484d;color:#fff}
+.window-body{flex:1;overflow:auto;position:relative}
+.resizer{position:absolute;right:0;bottom:0;width:16px;height:16px;cursor:nwse-resize;z-index:5}
+.window.maximized .resizer{display:none}
+
+/* ===== TASKBAR ===== */
+#taskbar{position:fixed;left:0;right:0;bottom:0;height:52px;background:rgba(16,19,28,.88);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-top:1px solid var(--border);display:flex;align-items:center;padding:0 8px;gap:6px;z-index:100000}
+#start-btn{width:44px;height:40px;border-radius:9px;background:transparent;font-size:20px;display:flex;align-items:center;justify-content:center;transition:.15s}
+#start-btn:hover{background:rgba(255,255,255,.13)}
+#start-btn.active{background:var(--accent)}
+#task-items{flex:1;display:flex;gap:5px;overflow-x:auto;overflow-y:hidden;scrollbar-width:none}
+#task-items::-webkit-scrollbar{display:none}
+.task-item{height:38px;padding:0 14px;border-radius:8px;background:rgba(255,255,255,.06);color:var(--text);font-size:12.5px;display:flex;align-items:center;gap:8px;white-space:nowrap;transition:.15s;max-width:190px;border-bottom:2px solid transparent}
+.task-item:hover{background:rgba(255,255,255,.13)}
+.task-item.active{background:rgba(255,255,255,.16);border-bottom-color:var(--accent)}
+.task-item.min{opacity:.55}
+#tray{display:flex;align-items:center;gap:12px;padding:0 12px;height:40px;border-radius:8px;font-size:12.5px;transition:.15s;color:var(--sub)}
+#tray:hover{background:rgba(255,255,255,.1)}
+#tray .time{font-weight:600;color:var(--text)}
+
+/* ===== START MENU ===== */
+#start-menu{position:fixed;left:10px;bottom:62px;width:360px;max-height:64vh;background:rgba(22,26,38,.96);backdrop-filter:blur(28px);-webkit-backdrop-filter:blur(28px);border:1px solid var(--border);border-radius:16px;padding:14px;z-index:100001;display:none;box-shadow:0 24px 70px rgba(0,0,0,.7);overflow-y:auto}
+#start-menu.open{display:block;animation:pop .18s cubic-bezier(.2,.9,.3,1.2)}
+@keyframes pop{from{opacity:0;transform:translateY(14px) scale(.97)}to{opacity:1;transform:none}}
+#start-menu h4{font-size:11px;text-transform:uppercase;letter-spacing:1.3px;color:var(--sub);margin:6px 8px 12px;font-weight:600}
+.app-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.app-tile{padding:14px 6px;border-radius:10px;background:transparent;color:var(--text);display:flex;flex-direction:column;align-items:center;gap:7px;font-size:11.5px;transition:.15s;text-align:center}
+.app-tile:hover{background:rgba(255,255,255,.11)}
+.app-tile:active{transform:scale(.95)}
+.app-tile .ic{font-size:26px}
+.sm-footer{margin-top:12px;padding-top:12px;border-top:1px solid var(--border);display:flex;align-items:center;gap:10px;font-size:12.5px;color:var(--sub);padding-left:8px}
+.sm-avatar{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--accent),#a855f7);display:flex;align-items:center;justify-content:center;font-size:14px}
+
+/* ===== APP STYLES ===== */
+.pad{padding:16px}
+/* Calculator */
+.calc{padding:14px;display:flex;flex-direction:column;height:100%;gap:12px}
+.calc-display{background:rgba(0,0,0,.35);border:1px solid var(--border);border-radius:10px;padding:16px;text-align:right;font-size:32px;font-weight:300;min-height:74px;display:flex;align-items:center;justify-content:flex-end;overflow:hidden;word-break:break-all;letter-spacing:.5px}
+.calc-keys{flex:1;display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.calc-keys button{background:rgba(255,255,255,.07);color:var(--text);border-radius:10px;font-size:19px;font-weight:500;transition:.12s}
+.calc-keys button:hover{background:rgba(255,255,255,.16)}
+.calc-keys button:active{transform:scale(.94)}
+.calc-keys .op{background:rgba(79,140,255,.18);color:#9dc0ff}
+.calc-keys .op:hover{background:rgba(79,140,255,.32)}
+.calc-keys .eq{background:var(--accent);color:#fff}
+.calc-keys .eq:hover{background:#6b9dff}
+
+/* Notepad */
+.np-wrap{display:flex;flex-direction:column;height:100%}
+.np-toolbar{display:flex;gap:8px;padding:9px 12px;border-bottom:1px solid var(--border);align-items:center;flex-shrink:0;flex-wrap:wrap}
+.tb-btn{padding:6px 13px;border-radius:7px;background:rgba(255,255,255,.08);color:var(--text);font-size:12.5px;transition:.12s}
+.tb-btn:hover{background:rgba(255,255,255,.17)}
+.tb-btn.primary{background:var(--accent);color:#fff}
+.tb-btn.primary:hover{background:#6b9dff}
+.np-name{flex:1;min-width:110px;background:rgba(0,0,0,.28);border:1px solid var(--border);border-radius:7px;padding:6px 11px;color:var(--text);font-size:12.5px;outline:none}
+.np-name:focus{border-color:var(--accent)}
+.np-area{flex:1;background:rgba(0,0,0,.22);border:none;outline:none;color:var(--text);padding:16px;font-family:'Consolas','Monaco',monospace;font-size:14px;line-height:1.65;resize:none}
+.np-status{padding:6px 14px;font-size:11.5px;color:var(--sub);border-top:1px solid var(--border);flex-shrink:0}
+
+/* Files */
+.fm-toolbar{display:flex;gap:8px;padding:10px 12px;border-bottom:1px solid var(--border);align-items:center;flex-shrink:0}
+.file-list{padding:8px}
+.file-row{display:flex;align-items:center;gap:12px;padding:11px 14px;border-radius:9px;cursor:pointer;transition:.12s;font-size:13.5px}
+.file-row:hover{background:rgba(255,255,255,.09)}
+.file-row .ic{font-size:20px}
+.file-row .meta{margin-left:auto;font-size:11.5px;color:var(--sub)}
+.file-row .del{opacity:0;padding:4px 9px;border-radius:6px;background:rgba(229,72,77,.2);color:#ff8b8f;font-size:11.5px;transition:.12s}
+.file-row:hover .del{opacity:1}
+.file-row .del:hover{background:#e5484d;color:#fff}
+.empty{padding:50px 20px;text-align:center;color:var(--sub);font-size:13px}
+
+/* Terminal */
+.term{height:100%;background:rgba(6,8,14,.85);padding:14px;font-family:'Consolas','Monaco',monospace;font-size:13.5px;display:flex;flex-direction:column;overflow:hidden}
+.term-out{flex:1;overflow-y:auto;white-space:pre-wrap;word-break:break-word;line-height:1.55}
+.term-out .cmd{color:#7dd3fc}
+.term-out .ok{color:#86efac}
+.term-out .err{color:#ff8b8f}
+.term-out .info{color:#fbbf24}
+.term-line{display:flex;gap:8px;align-items:center;margin-top:6px;flex-shrink:0}
+.term-prompt{color:#86efac;white-space:nowrap}
+.term-in{flex:1;background:transparent;border:none;outline:none;color:var(--text);font-family:inherit;font-size:13.5px;caret-color:#86efac}
+
+/* Paint */
+.pt-wrap{display:flex;flex-direction:column;height:100%}
+.pt-bar{display:flex;gap:9px;padding:9px 12px;border-bottom:1px solid var(--border);align-items:center;flex-shrink:0;flex-wrap:wrap}
+.pt-bar input[type=color]{width:36px;height:32px;border:1px solid var(--border);border-radius:7px;background:transparent;cursor:pointer;padding:2px}
+.pt-bar input[type=range]{width:110px;accent-color:var(--accent)}
+.pt-bar label{font-size:12px;color:var(--sub);display:flex;align-items:center;gap:7px}
+.pt-canvas{flex:1;background:#fff;cursor:crosshair;display:block;touch-action:none}
+
+/* Clock */
+.clock-wrap{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:20px}
+.clock-time{font-size:52px;font-weight:200;letter-spacing:2px;font-variant-numeric:tabular-nums}
+.clock-date{font-size:14px;color:var(--sub);text-transform:capitalize}
+.clock-sec{font-size:12px;color:var(--accent);letter-spacing:3px}
+
+/* Settings */
+.set-group{margin-bottom:22px}
+.set-group h5{font-size:12px;text-transform:uppercase;letter-spacing:1.2px;color:var(--sub);margin-bottom:11px;font-weight:600}
+.wp-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+.wp-item{height:62px;border-radius:10px;cursor:pointer;border:2px solid transparent;transition:.15s}
+.wp-item:hover{transform:scale(1.05)}
+.wp-item.sel{border-color:var(--accent);box-shadow:0 0 0 3px rgba(79,140,255,.25)}
+.wp-item.w0{background:linear-gradient(135deg,#0f2027,#203a43,#2c5364)}
+.wp-item.w1{background:linear-gradient(135deg,#1e3c72,#2a5298,#6b46c1)}
+.wp-item.w2{background:linear-gradient(135deg,#42275a,#734b6d)}
+.wp-item.w3{background:linear-gradient(135deg,#0b486b,#f56217)}
+.wp-item.w4{background:linear-gradient(135deg,#134e5e,#71b280)}
+.color-row{display:flex;gap:10px;flex-wrap:wrap}
+.color-dot{width:34px;height:34px;border-radius:50%;cursor:pointer;border:2px solid transparent;transition:.15s}
+.color-dot:hover{transform:scale(1.12)}
+.color-dot.sel{border-color:#fff;box-shadow:0 0 0 3px rgba(255,255,255,.2)}
+
+/* Game */
+.ttt{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding:20px}
+.ttt h3{font-size:17px;font-weight:600}
+.ttt-status{font-size:13.5px;color:var(--sub);min-height:20px}
+.ttt-board{display:grid;grid-template-columns:repeat(3,82px);grid-template-rows:repeat(3,82px);gap:8px}
+.ttt-cell{background:rgba(255,255,255,.07);border-radius:11px;font-size:38px;display:flex;align-items:center;justify-content:center;transition:.13s;color:var(--text)}
+.ttt-cell:hover{background:rgba(255,255,255,.15)}
+.ttt-cell.win{background:rgba(79,140,255,.32)}
+
+/* Browser */
+.br-bar{display:flex;gap:8px;padding:9px 12px;border-bottom:1px solid var(--border);align-items:center;flex-shrink:0}
+.br-url{flex:1;background:rgba(0,0,0,.3);border:1px solid var(--border);border-radius:20px;padding:8px 16px;color:var(--text);font-size:13px;outline:none}
+.br-url:focus{border-color:var(--accent)}
+.br-frame{flex:1;width:100%;border:none;background:#fff}
+.br-note{padding:40px 30px;text-align:center;color:var(--sub);font-size:13px;line-height:1.8}
+
+::-webkit-scrollbar{width:11px;height:11px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:rgba(255,255,255,.16);border-radius:6px;border:3px solid transparent;background-clip:content-box}
+::-webkit-scrollbar-thumb:hover{background:rgba(255,255,255,.3);background-clip:content-box}
 </style>
 </head>
 <body>
 
-<header>
-  <h1>⚡ VOTOL <span>Tuner Pro</span></h1>
-  <span class="tag">Verify</span>
-  <span id="dot" class="dot"></span>
-</header>
-
-<main>
-
-<div class="warnbox">
-  📱 <b>Yêu cầu:</b> Chrome Android + cáp USB-serial (CH340/CP2102/FTDI) + đầu chuyển OTG.<br>
-  ✅ <b>Xác minh tự động:</b> Tool sẽ đọc lại thông số ngay sau khi ghi để đảm bảo giá trị đã được lưu đúng.
+<div id="desktop" class="wp1">
+  <div id="desktop-icons"></div>
 </div>
 
-<!-- KẾT NỐI -->
-<section class="panel">
-  <h2>Kết nối</h2>
-  <button id="btnConnect" class="primary wide" style="margin-bottom:8px">🔌 Kết nối cáp USB</button>
-  <button id="btnDisconnect" class="wide" disabled>Ngắt kết nối</button>
-  <div class="grid" style="margin-top:10px">
-    <div class="card">
-      <label>Baud</label>
-      <select id="baud">
-        <option value="9600">9600</option>
-        <option value="19200">19200</option>
-        <option value="38400">38400</option>
-        <option value="57600">57600</option>
-        <option value="115200" selected>115200</option>
-      </select>
-    </div>
-    <div class="card">
-      <label>Model</label>
-      <select id="model">
-        <option>VOTOL EM-80S</option>
-        <option selected>VOTOL EM-100S</option>
-        <option>VOTOL EM-150S</option>
-      </select>
-    </div>
+<div id="windows-layer"></div>
+
+<div id="taskbar">
+  <button id="start-btn" title="Menu">⊞</button>
+  <div id="task-items"></div>
+  <div id="tray">
+    <span id="tray-icon">🔊</span>
+    <span class="time" id="tray-time">--:--</span>
   </div>
-  <div id="chipInfo" class="hint">Chip: chưa kết nối</div>
-</section>
-
-<!-- TABS -->
-<div class="tabs">
-  <button class="tab active" data-tab="basic">Cơ bản</button>
-  <button class="tab" data-tab="advanced">Nâng cao</button>
-  <button class="tab" data-tab="modes">Chế độ lái</button>
-  <button class="tab" data-tab="monitor">Giám sát</button>
-  <button class="tab" data-tab="verify">🔍 Xác minh</button>
-  <button class="tab" data-tab="log">Log</button>
 </div>
 
-<!-- TAB CƠ BẢN -->
-<div id="tab-basic" class="tab-content active">
-  <section class="panel">
-    <h2>Thông số hệ thống</h2>
-    <div class="row" style="margin-bottom:10px">
-      <button id="rdBasic">📥 Đọc tab</button>
-      <button id="wrBasic" class="danger">📤 Ghi & Xác minh</button>
-    </div>
-    <div id="grid-basic" class="grid" style="grid-template-columns:1fr"></div>
-  </section>
+<div id="start-menu">
+  <h4>Ứng dụng</h4>
+  <div class="app-grid" id="start-grid"></div>
+  <div class="sm-footer"><div class="sm-avatar">👤</div><div>Người dùng WebOS</div></div>
 </div>
-
-<!-- TAB NÂNG CAO -->
-<div id="tab-advanced" class="tab-content">
-  <section class="panel">
-    <h2>Thông số nâng cao</h2>
-    <div class="row" style="margin-bottom:10px">
-      <button id="rdAdv">📥 Đọc tab</button>
-      <button id="wrAdv" class="danger">📤 Ghi & Xác minh</button>
-    </div>
-    <div id="grid-advanced" class="grid" style="grid-template-columns:1fr"></div>
-  </section>
-</div>
-
-<!-- TAB CHẾ ĐỘ LÁI -->
-<div id="tab-modes" class="tab-content">
-  <section class="panel">
-    <h2>Chế độ lái</h2>
-    <div class="row" style="margin-bottom:10px">
-      <button id="rdModes">📥 Đọc tab</button>
-      <button id="wrModes" class="danger">📤 Ghi & Xác minh</button>
-    </div>
-    <div id="grid-modes" class="grid" style="grid-template-columns:1fr"></div>
-  </section>
-</div>
-
-<!-- TAB GIÁM SÁT -->
-<div id="tab-monitor" class="tab-content">
-  <section class="panel">
-    <h2>Telemetry thời gian thực</h2>
-    <div class="row" style="margin-bottom:10px">
-      <button id="btnStartMon" class="primary">▶ Bắt đầu</button>
-      <button id="btnStopMon" disabled>⏹ Dừng</button>
-    </div>
-    <div class="tel-grid">
-      <div class="tel"><div class="lbl">Pin</div><div class="num" id="t-volt">--</div><div class="un">V</div></div>
-      <div class="tel"><div class="lbl">Dòng</div><div class="num" id="t-curr">--</div><div class="un">A</div></div>
-      <div class="tel"><div class="lbl">RPM</div><div class="num" id="t-rpm">--</div><div class="un">v/p</div></div>
-      <div class="tel"><div class="lbl">T° Ctrl</div><div class="num" id="t-tc">--</div><div class="un">°C</div></div>
-      <div class="tel"><div class="lbl">T° Motor</div><div class="num" id="t-tm">--</div><div class="un">°C</div></div>
-      <div class="tel"><div class="lbl">Mode</div><div class="num" id="t-mode">--</div><div class="un"></div></div>
-    </div>
-  </section>
-</div>
-
-<!-- TAB XÁC MINH -->
-<div id="tab-verify" class="tab-content">
-  <section class="panel">
-    <h2>Lịch sử xác minh</h2>
-    <div class="row" style="margin-bottom:10px">
-      <button id="btnClearVerify">Xóa lịch sử</button>
-      <button id="btnExportVerify">📄 Xuất CSV</button>
-    </div>
-    <div id="verifyLog" class="verify-log">Chưa có xác minh nào.</div>
-    <div class="hint" style="margin-top:8px">
-      Mỗi dòng ghi: <b>Tên tham số</b> | Giá trị gửi | Giá trị đọc về | Kết quả<br>
-      ✅ = Khớp hoàn toàn · ⚠️ = Lệch nhỏ (≤1 đơn vị) · ❌ = Không khớp
-    </div>
-  </section>
-</div>
-
-<!-- TAB LOG -->
-<div id="tab-log" class="tab-content">
-  <section class="panel">
-    <h2>Log giao tiếp</h2>
-    <div class="row" style="margin-bottom:8px">
-      <button id="btnClearLog">Xóa log</button>
-    </div>
-    <div id="log"></div>
-    <h2 style="margin-top:12px">Lệnh Hex thô</h2>
-    <div class="row">
-      <input type="text" id="rawCmd" placeholder="VD: 3A 01 00 01 00 3A" style="flex:2">
-      <button id="btnRaw">Gửi</button>
-    </div>
-  </section>
-</div>
-
-</main>
 
 <script>
-/* ============================================================
-   1. THAM SỐ
-   ============================================================ */
-const PARAMS = {
-  basic: [
-    {n:'Điện áp định mức',a:0x0001,u:'V',s:0.1,mn:48,mx:96},
-    {n:'Loại pin (0-3)',a:0x0002,u:'',s:1,mn:0,mx:3},
-    {n:'Dòng pha tối đa',a:0x0003,u:'A',s:1,mn:0,mx:400},
-    {n:'Dòng đường tối đa',a:0x0004,u:'A',s:1,mn:0,mx:200},
-    {n:'Dòng Boost',a:0x0005,u:'A',s:1,mn:0,mx:250},
-    {n:'Số cặp cực',a:0x0006,u:'',s:1,mn:1,mx:32},
-    {n:'Đường kính bánh',a:0x0007,u:'inch',s:0.1,mn:8,mx:24},
-    {n:'Tỉ số truyền',a:0x0008,u:'',s:0.01,mn:0.5,mx:10},
-    {n:'Điện áp cắt dưới',a:0x0009,u:'V',s:0.1,mn:30,mx:80},
-    {n:'Điện áp bảo vệ trên',a:0x000A,u:'V',s:0.1,mn:60,mx:100},
-  ],
-  advanced: [
-    {n:'Flux Weakening',a:0x0100,u:'%',s:1,mn:100,mx:200},
-    {n:'EBS Ratio',a:0x0101,u:'%',s:1,mn:0,mx:100},
-    {n:'EBS Delay',a:0x0102,u:'ms',s:1,mn:0,mx:2000},
-    {n:'PID Kp',a:0x0103,u:'',s:0.01,mn:0,mx:100},
-    {n:'PID Ki',a:0x0104,u:'',s:0.01,mn:0,mx:100},
-    {n:'T° cảnh báo Ctrl',a:0x0105,u:'°C',s:1,mn:60,mx:120},
-    {n:'T° cắt Ctrl',a:0x0106,u:'°C',s:1,mn:80,mx:150},
-    {n:'T° cảnh báo Motor',a:0x0107,u:'°C',s:1,mn:60,mx:150},
-    {n:'T° cắt Motor',a:0x0108,u:'°C',s:1,mn:80,mx:180},
-  ],
-  modes: [
-    {n:'Low Gear Speed',a:0x0200,u:'km/h',s:1,mn:10,mx:120},
-    {n:'Low Gear Current',a:0x0201,u:'A',s:1,mn:0,mx:150},
-    {n:'Mid Gear Speed',a:0x0202,u:'km/h',s:1,mn:20,mx:150},
-    {n:'Mid Gear Current',a:0x0203,u:'A',s:1,mn:0,mx:200},
-    {n:'High Gear Speed',a:0x0204,u:'km/h',s:1,mn:30,mx:200},
-    {n:'High Gear Current',a:0x0205,u:'A',s:1,mn:0,mx:250},
-    {n:'Sport Mode (0/1)',a:0x0206,u:'',s:1,mn:0,mx:1},
-    {n:'Sport Boost',a:0x0207,u:'A',s:1,mn:0,mx:300},
-    {n:'Reverse Speed',a:0x0208,u:'km/h',s:1,mn:0,mx:20},
-    {n:'Reverse Current',a:0x0209,u:'A',s:1,mn:0,mx:50},
-  ]
-};
-const MON = [
-  {n:'Điện áp',a:0x1000,s:0.1,k:'volt',u:'V'},
-  {n:'Dòng',a:0x1001,s:1,k:'curr',u:'A'},
-  {n:'RPM',a:0x1002,s:1,k:'rpm',u:''},
-  {n:'T° Ctrl',a:0x1003,s:1,k:'tc',u:'°C'},
-  {n:'T° Motor',a:0x1004,s:1,k:'tm',u:'°C'},
-];
-
-/* ============================================================
-   2. VOTOL PROTOCOL
-   ============================================================ */
-const PROTO = {
-  START:0x3A, RD:0x01, WR:0x02,
-  rd(addr){ const p=[this.START,this.RD,(addr>>8)&255,addr&255,0]; p.push(this.crc(p)); return new Uint8Array(p); },
-  wr(addr,v){ const p=[this.START,this.WR,(addr>>8)&255,addr&255,2,(v>>8)&255,v&255]; p.push(this.crc(p)); return new Uint8Array(p); },
-  crc(b){ let c=0; for(const x of b) c^=x; return c&255; },
-  parse(b){ if(b.length<5||b[0]!==this.START) return null;
-    return {cmd:b[1],addr:(b[2]<<8)|b[3],value:(b[4]<<8)|b[5]}; }
+/* =========================================================
+   HỆ THỐNG TỆP TIN ẢO (localStorage)
+   ========================================================= */
+const FS = {
+  KEY: 'webos_files_v1',
+  all(){ try{ return JSON.parse(localStorage.getItem(this.KEY) || '{}'); }catch(e){ return {}; } },
+  save(name, content){
+    const f = this.all();
+    f[name] = { content, mtime: Date.now() };
+    localStorage.setItem(this.KEY, JSON.stringify(f));
+  },
+  read(name){ const f = this.all(); return f[name] ? f[name].content : null; },
+  del(name){ const f = this.all(); delete f[name]; localStorage.setItem(this.KEY, JSON.stringify(f)); },
+  list(){ return Object.entries(this.all()).map(([n,v])=>({name:n, ...v})).sort((a,b)=>b.mtime-a.mtime); }
 };
 
-/* ============================================================
-   3. WEBUSB LAYER + CHIP DRIVERS
-   ============================================================ */
-let usb=null, epIn=null, epOut=null, ifaceNum=0, keepReading=false, readBuf=[];
-const pending=new Map();
+/* =========================================================
+   QUẢN LÝ CỬA SỔ
+   ========================================================= */
+let zTop = 100;
+let winSeq = 0;
+const wins = new Map();      // id -> { el, btn, minimized, maximized, prev }
+let activeId = null;
 
-const CHIPS = {
-  0x1A86:{name:'CH340/CH341', baudReg:{ 9600:0xB2,19200:0xD9,38400:0x98,57600:0xE6,115200:0xCC }},
-  0x10C4:{name:'CP210x'},
-  0x0403:{name:'FTDI'},
-  0x067B:{name:'PL2303'},
+function createWindow(appId, { title, icon, width = 640, height = 460, build }) {
+  if (wins.has(appId)) {           // đã mở -> chỉ focus
+    const w = wins.get(appId);
+    if (w.minimized) toggleMinimize(appId);
+    focusWindow(appId);
+    return w;
+  }
+
+  const id = appId;
+  const el = document.createElement('div');
+  el.className = 'window';
+  el.dataset.id = id;
+  el.style.width  = width + 'px';
+  el.style.height = height + 'px';
+  const n = ++winSeq;
+  const off = (n % 7) * 26;
+  el.style.left = Math.max(12, Math.round((window.innerWidth  - width ) / 2) - 90 + off) + 'px';
+  el.style.top  = Math.max(12, Math.round((window.innerHeight - height) / 2) - 60 + off) + 'px';
+  el.style.zIndex = ++zTop;
+
+  el.innerHTML = `
+    <div class="title-bar">
+      <div class="title"><span class="app-icon">${icon}</span><span class="app-title">${title}</span></div>
+      <div class="win-controls">
+        <button class="btn-min"   title="Thu nhỏ">—</button>
+        <button class="btn-max"   title="Phóng to">▢</button>
+        <button class="btn-close" title="Đóng">✕</button>
+      </div>
+    </div>
+    <div class="window-body"></div>
+    <div class="resizer"></div>`;
+
+  const titleBar = el.querySelector('.title-bar');
+  const body     = el.querySelector('.window-body');
+  const resizer  = el.querySelector('.resizer');
+
+  // Sự kiện điều khiển
+  el.querySelector('.btn-close').onclick = e => { e.stopPropagation(); closeWindow(id); };
+  el.querySelector('.btn-min').onclick   = e => { e.stopPropagation(); toggleMinimize(id); };
+  el.querySelector('.btn-max').onclick   = e => { e.stopPropagation(); toggleMaximize(id); };
+  el.addEventListener('pointerdown', () => focusWindow(id));
+
+  makeDraggable(el, titleBar);
+  makeResizable(el, resizer);
+
+  document.getElementById('windows-layer').appendChild(el);
+
+  // Nút trên taskbar
+  const btn = document.createElement('button');
+  btn.className = 'task-item active';
+  btn.innerHTML = `<span>${icon}</span><span>${title}</span>`;
+  btn.onclick = () => {
+    const w = wins.get(id);
+    if (!w) return;
+    if (w.minimized) { toggleMinimize(id); focusWindow(id); }
+    else if (activeId === id) toggleMinimize(id);
+    else focusWindow(id);
+  };
+  document.getElementById('task-items').appendChild(btn);
+
+  const rec = { el, btn, minimized:false, maximized:false, prev:null, appId, title, icon };
+  wins.set(id, rec);
+
+  build(body, { id, close: () => closeWindow(id), setTitle: t => {
+    el.querySelector('.app-title').textContent = t;
+    btn.querySelector('span:last-child').textContent = t;
+  }});
+
+  focusWindow(id);
+  return rec;
+}
+
+function focusWindow(id){
+  const w = wins.get(id);
+  if (!w) return;
+  activeId = id;
+  w.el.style.zIndex = ++zTop;
+  wins.forEach((v,k)=>{
+    v.btn.classList.toggle('active', k === id);
+    v.el.style.opacity = (k === id) ? '1' : '.97';
+  });
+}
+
+function closeWindow(id){
+  const w = wins.get(id);
+  if (!w) return;
+  w.el.style.animation = 'winIn .12s reverse';
+  setTimeout(()=>{
+    w.el.remove();
+    w.btn.remove();
+    wins.delete(id);
+    if (activeId === id) activeId = null;
+  }, 100);
+}
+
+function toggleMinimize(id){
+  const w = wins.get(id);
+  if (!w) return;
+  w.minimized = !w.minimized;
+  w.el.classList.toggle('minimized', w.minimized);
+  w.btn.classList.toggle('min', w.minimized);
+  if (!w.minimized) focusWindow(id);
+}
+
+function toggleMaximize(id){
+  const w = wins.get(id);
+  if (!w) return;
+  if (w.maximized) {
+    Object.assign(w.el.style, w.prev);
+    w.el.classList.remove('maximized');
+    w.maximized = false;
+  } else {
+    w.prev = { left:w.el.style.left, top:w.el.style.top, width:w.el.style.width, height:w.el.style.height };
+    w.el.classList.add('maximized');
+    w.maximized = true;
+  }
+  setTimeout(()=>window.dispatchEvent(new Event('resize')), 30);
+}
+
+/* Kéo cửa sổ */
+function makeDraggable(el, handle){
+  let dragging=false, sx=0, sy=0, ox=0, oy=0;
+  handle.addEventListener('pointerdown', e=>{
+    if (e.target.closest('.win-controls') || el.classList.contains('maximized')) return;
+    dragging = true;
+    sx = e.clientX; sy = e.clientY;
+    ox = parseFloat(el.style.left) || 0;
+    oy = parseFloat(el.style.top)  || 0;
+    handle.setPointerCapture(e.pointerId);
+    handle.style.cursor = 'grabbing';
+  });
+  handle.addEventListener('pointermove', e=>{
+    if (!dragging) return;
+    const nx = ox + e.clientX - sx;
+    const ny = oy + e.clientY - sy;
+    el.style.left = Math.min(Math.max(nx, -el.offsetWidth + 90), window.innerWidth - 90) + 'px';
+    el.style.top  = Math.min(Math.max(ny, 0), window.innerHeight - 92) + 'px';
+  });
+  const stop = e => { dragging=false; handle.style.cursor='grab'; try{handle.releasePointerCapture(e.pointerId);}catch(_){} };
+  handle.addEventListener('pointerup', stop);
+  handle.addEventListener('pointercancel', stop);
+}
+
+/* Đổi kích thước */
+function makeResizable(el, handle){
+  let rz=false, sx=0, sy=0, ow=0, oh=0;
+  handle.addEventListener('pointerdown', e=>{
+    e.stopPropagation(); rz=true;
+    sx=e.clientX; sy=e.clientY; ow=el.offsetWidth; oh=el.offsetHeight;
+    handle.setPointerCapture(e.pointerId);
+  });
+  handle.addEventListener('pointermove', e=>{
+    if(!rz) return;
+    el.style.width  = Math.max(280, ow + e.clientX - sx) + 'px';
+    el.style.height = Math.max(180, oh + e.clientY - sy) + 'px';
+  });
+  const stop = e => { rz=false; try{handle.releasePointerCapture(e.pointerId);}catch(_){} };
+  handle.addEventListener('pointerup', stop);
+  handle.addEventListener('pointercancel', stop);
+}
+
+/* =========================================================
+   ỨNG DỤNG
+   ========================================================= */
+const APPS = {
+  files:      { name:'File Explorer', icon:'📁', w:720, h:500, build: buildFiles },
+  notepad:    { name:'Notepad',       icon:'📝', w:660, h:470, build: buildNotepad },
+  calculator: { name:'Máy tính',      icon:'🧮', w:340, h:500, build: buildCalculator },
+  terminal:   { name:'Terminal',      icon:'⌨️', w:680, h:430, build: buildTerminal },
+  paint:      { name:'Paint',         icon:'🎨', w:760, h:560, build: buildPaint },
+  browser:    { name:'Trình duyệt',   icon:'🌐', w:860, h:600, build: buildBrowser },
+  clock:      { name:'Đồng hồ',       icon:'⏰', w:400, h:340, build: buildClock },
+  game:       { name:'Tic Tac Toe',   icon:'🎮', w:400, h:500, build: buildGame },
+  settings:   { name:'Cài đặt',       icon:'⚙️', w:600, h:480, build: buildSettings },
+  about:      { name:'Giới thiệu',    icon:'ℹ️', w:500, h:430, build: buildAbout },
 };
 
-async function initCH340(dev, iface){
-  const baud = +document.getElementById('baud').value;
-  const reg = CHIPS[0x1A86].baudReg[baud] || 0xCC;
-  const ctrlOut = (req,val,idx)=>dev.controlTransferOut({
-    requestType:'vendor', recipient:'device', request:req, value:val, index:idx
+function launch(appId){
+  const a = APPS[appId];
+  if (!a) return;
+  createWindow(appId, { title:a.name, icon:a.icon, width:a.w, height:a.h, build:a.build });
+  closeStartMenu();
+}
+
+/* ---------- CALCULATOR ---------- */
+function buildCalculator(body){
+  body.innerHTML = `
+    <div class="calc">
+      <div class="calc-display" id="cd">0</div>
+      <div class="calc-keys">
+        <button class="op" data-k="C">C</button>
+        <button class="op" data-k="DEL">⌫</button>
+        <button class="op" data-k="(">(</button>
+        <button class="op" data-k=")">)</button>
+        <button data-k="7">7</button><button data-k="8">8</button><button data-k="9">9</button>
+        <button class="op" data-k="/">÷</button>
+        <button data-k="4">4</button><button data-k="5">5</button><button data-k="6">6</button>
+        <button class="op" data-k="*">×</button>
+        <button data-k="1">1</button><button data-k="2">2</button><button data-k="3">3</button>
+        <button class="op" data-k="-">−</button>
+        <button data-k="0">0</button><button data-k=".">.</button>
+        <button class="op" data-k="%">%</button>
+        <button class="op" data-k="+">+</button>
+        <button class="eq" data-k="=" style="grid-column:span 4">=</button>
+      </div>
+    </div>`;
+  const disp = body.querySelector('#cd');
+  let expr = '';
+
+  const render = () => disp.textContent = expr === '' ? '0' : expr;
+
+  const evaluate = () => {
+    let s = expr.replace(/×/g,'*').replace(/÷/g,'/');
+    if (!/^[0-9+\-*/.() %]+$/.test(s) || s.trim()==='') { expr=''; render(); return; }
+    try {
+      s = s.replace(/(\d+(?:\.\d+)?)%/g, '($1/100)');
+      const r = Function('"use strict";return ('+s+')')();
+      if (!isFinite(r)) throw 0;
+      expr = String(Math.round(r * 1e10) / 1e10);
+    } catch(e) { expr = 'Lỗi'; }
+    render();
+  };
+
+  body.querySelectorAll('.calc-keys button').forEach(b=>{
+    b.onclick = () => {
+      const k = b.dataset.k;
+      if (expr === 'Lỗi' && k !== 'C') expr = '';
+      if (k === 'C')   { expr = ''; }
+      else if (k === 'DEL') { expr = expr.slice(0,-1); }
+      else if (k === '=')   { evaluate(); return; }
+      else expr += k;
+      render();
+    };
   });
-  await ctrlOut(0xA1, 0, 0);
-  await ctrlOut(0x9A, 0x1312, reg);
-  await ctrlOut(0x9A, 0x1313, 0x00);
-  await ctrlOut(0x9A, 0x0F2C, 0x0008);
-  await ctrlOut(0x9A, 0x2518, 0x00C3);
+
+  // Hỗ trợ bàn phím
+  const keyHandler = e => {
+    if (!document.body.contains(body)) { document.removeEventListener('keydown', keyHandler); return; }
+    if (!wins.get('calculator') || activeId !== 'calculator') return;
+    const k = e.key;
+    if (/^[0-9+\-*/.()%]$/.test(k)) { expr += k; render(); }
+    else if (k === 'Enter') { evaluate(); }
+    else if (k === 'Backspace') { expr = expr.slice(0,-1); render(); }
+    else if (k === 'Escape') { expr=''; render(); }
+  };
+  document.addEventListener('keydown', keyHandler);
 }
 
-async function initCP210x(dev, iface){
-  const baud = +document.getElementById('baud').value;
-  const clk = 3686400;
-  const div = Math.round(clk / baud);
-  const ctrlOut = (req,val,idx)=>dev.controlTransferOut({
-    requestType:'vendor', recipient:'interface', request:req, value:val, index:idx
-  });
-  await ctrlOut(0x00, 0x0001, 0);
-  await ctrlOut(0x00, 0x0303, iface);
-  await ctrlOut(0x1E, 0x0000, (div & 0xFF) | 0x0100);
-  await ctrlOut(0x1E, 0x0000, ((div >> 8) & 0xFF) | 0x0100);
-  await ctrlOut(0x1E, 0x0000, 0x0300 | 0x08);
-}
+/* ---------- NOTEPAD ---------- */
+function buildNotepad(body, api){
+  body.innerHTML = `
+    <div class="np-wrap">
+      <div class="np-toolbar">
+        <input class="np-name" id="npName" placeholder="tên-tệp.txt" value="ghichu.txt">
+        <button class="tb-btn primary" id="npSave">💾 Lưu</button>
+        <button class="tb-btn" id="npOpen">📂 Mở</button>
+        <button class="tb-btn" id="npNew">✚ Mới</button>
+        <button class="tb-btn" id="npDl">⬇ Tải về</button>
+      </div>
+      <textarea class="np-area" id="npArea" placeholder="Bắt đầu nhập nội dung..."></textarea>
+      <div class="np-status" id="npStatus">Sẵn sàng</div>
+    </div>`;
+  const area = body.querySelector('#npArea');
+  const nameI = body.querySelector('#npName');
+  const status = body.querySelector('#npStatus');
+  let timer = null;
 
-async function initFTDI(dev, iface){
-  const baud = +document.getElementById('baud').value;
-  const ctrlOut = (req,val,idx)=>dev.controlTransferOut({
-    requestType:'vendor', recipient:'device', request:req, value:val, index:idx
-  });
-  await ctrlOut(0x00, 0, 0);
-  await ctrlOut(0x00, 1, 0);
-  await ctrlOut(0x00, 2, 0);
-  const div = Math.round(3000000 / baud);
-  await ctrlOut(0x03, div, 0);
-  await ctrlOut(0x04, 0x0008, 0);
-}
+  const refresh = () => {
+    const t = area.value;
+    status.textContent = `${t.length} ký tự · ${t.split(/\s+/).filter(Boolean).length} từ`;
+  };
+  area.addEventListener('input', ()=>{ refresh(); clearTimeout(timer); timer = setTimeout(autoSave, 1200); });
 
-async function connectUSB(){
-  if(!('usb' in navigator)){
-    alert('Trình duyệt không hỗ trợ WebUSB.\nHãy dùng Chrome Android + cáp OTG.');
-    return;
+  function autoSave(){
+    const n = nameI.value.trim() || 'khongten.txt';
+    FS.save(n, area.value);
+    status.textContent = `✔ Đã tự động lưu "${n}"`;
   }
-  try{
-    usb = await navigator.usb.requestDevice({
-      filters:[
-        {vendorId:0x1A86},{vendorId:0x10C4},
-        {vendorId:0x0403},{vendorId:0x067B},
-      ]
-    });
-    await usb.open();
-    if(usb.configuration===null) await usb.selectConfiguration(1);
-    await usb.claimInterface(0);
 
-    const chipName = CHIPS[usb.vendorId]?.name || `VID ${usb.vendorId.toString(16)}`;
-    document.getElementById('chipInfo').textContent = `Chip: ${chipName}`;
+  body.querySelector('#npSave').onclick = () => {
+    const n = nameI.value.trim() || 'khongten.txt';
+    FS.save(n, area.value);
+    status.textContent = `✔ Đã lưu "${n}" lúc ${new Date().toLocaleTimeString('vi-VN')}`;
+    api.setTitle('Notepad — ' + n);
+  };
+  body.querySelector('#npNew').onclick = () => {
+    area.value = ''; nameI.value = 'ghichu.txt';
+    api.setTitle('Notepad'); refresh();
+  };
+  body.querySelector('#npOpen').onclick = () => {
+    const files = FS.list();
+    if (!files.length) { alert('Chưa có tệp nào. Hãy lưu một tệp trước!'); return; }
+    const n = prompt('Nhập tên tệp cần mở:\n\n' + files.map(f=>'• '+f.name).join('\n'));
+    if (!n) return;
+    const c = FS.read(n.trim());
+    if (c === null) { alert('Không tìm thấy tệp: ' + n); return; }
+    area.value = c; nameI.value = n.trim();
+    api.setTitle('Notepad — ' + n.trim()); refresh();
+  };
+  body.querySelector('#npDl').onclick = () => {
+    const blob = new Blob([area.value], {type:'text/plain;charset=utf-8'});
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = nameI.value.trim() || 'ghichu.txt';
+    a.click(); URL.revokeObjectURL(a.href);
+  };
 
-    try{
-      if(usb.vendorId===0x1A86) await initCH340(usb,0);
-      else if(usb.vendorId===0x10C4) await initCP210x(usb,0);
-      else if(usb.vendorId===0x0403) await initFTDI(usb,0);
-    }catch(e){ log('Init chip lỗi (bỏ qua): '+e.message,'err'); }
-
-    const iface = usb.configuration.interfaces[0];
-    for(const ep of iface.alternate.endpoints){
-      if(ep.type==='bulk' && ep.direction==='in') epIn = ep;
-      if(ep.type==='bulk' && ep.direction==='out') epOut = ep;
-    }
-    if(!epIn || !epOut) throw new Error('Không tìm thấy bulk endpoint');
-    ifaceNum = iface.interfaceNumber;
-
-    document.getElementById('dot').classList.add('on');
-    document.getElementById('btnConnect').disabled = true;
-    document.getElementById('btnDisconnect').disabled = false;
-    log(`✅ Đã kết nối ${chipName} @ ${document.getElementById('baud').value} baud`,'ok');
-
-    keepReading = true;
-    readLoop();
-  }catch(e){
-    log('Lỗi kết nối: '+e.message,'err');
-    alert('Không kết nối được. Kiểm tra cáp OTG và driver.');
-  }
+  refresh();
+  setTimeout(()=>area.focus(), 100);
 }
 
-async function disconnectUSB(){
-  keepReading = false;
-  try{ if(usb){ await usb.close(); usb=null; epIn=null; epOut=null; } }catch(e){}
-  document.getElementById('dot').classList.remove('on');
-  document.getElementById('btnConnect').disabled = false;
-  document.getElementById('btnDisconnect').disabled = true;
-  log('Đã ngắt kết nối.','');
-}
+/* ---------- FILE EXPLORER ---------- */
+function buildFiles(body){
+  body.innerHTML = `
+    <div class="fm-toolbar">
+      <button class="tb-btn" id="fmNew">✚ Tệp mới</button>
+      <button class="tb-btn" id="fmRefresh">🔄 Làm mới</button>
+      <button class="tb-btn" id="fmWipe" style="margin-left:auto;color:#ff8b8f">🗑 Xóa tất cả</button>
+    </div>
+    <div class="file-list" id="fmList"></div>`;
 
-async function readLoop(){
-  while(keepReading && usb){
-    try{
-      const res = await usb.transferIn(epIn.endpointNumber, 64);
-      if(res.data && res.data.byteLength){
-        const arr = new Uint8Array(res.data.buffer);
-        readBuf.push(...arr);
-        processBuf();
-      }
-    }catch(e){
-      if(keepReading) log('Read err: '+e.message,'err');
-      break;
-    }
-  }
-}
+  const list = body.querySelector('#fmList');
 
-function processBuf(){
-  const LEN = 7;
-  while(readBuf.length >= LEN){
-    const i = readBuf.indexOf(PROTO.START);
-    if(i<0){ readBuf=[]; return; }
-    if(i>0) readBuf = readBuf.slice(i);
-    if(readBuf.length<LEN) return;
-    const frame = readBuf.slice(0,LEN);
-    readBuf = readBuf.slice(LEN);
-    log('RX '+hex(frame),'rx');
-    const p = PROTO.parse(frame);
-    if(p) onResp(p);
-  }
-}
-
-function onResp({cmd,addr,value}){
-  for(const tab of ['basic','advanced','modes']){
-    const i = PARAMS[tab].findIndex(x=>x.a===addr);
-    if(i>=0){
-      const p = PARAMS[tab][i];
-      const disp = +(value * p.s).toFixed(2);
-      p.v = disp;
-      const el = document.getElementById(`v-${tab}-${i}`);
-      if(el) el.textContent = disp;
-      const inp = document.getElementById(`i-${tab}-${i}`);
-      if(inp && inp.style.borderColor) inp.style.borderColor = '';
-      if(pending.has(addr)){ pending.get(addr)(disp); pending.delete(addr); }
+  function render(){
+    const files = FS.list();
+    if (!files.length) {
+      list.innerHTML = `<div class="empty">📭<br><br>Chưa có tệp nào.<br>Mở Notepad và lưu một ghi chú để bắt đầu.</div>`;
       return;
     }
+    list.innerHTML = files.map(f => `
+      <div class="file-row" data-name="${escapeHtml(f.name)}">
+        <span class="ic">📄</span>
+        <span>${escapeHtml(f.name)}</span>
+        <span class="meta">${new Date(f.mtime).toLocaleString('vi-VN')}</span>
+        <button class="del" data-del="${escapeHtml(f.name)}">Xóa</button>
+      </div>`).join('');
   }
-  const mp = MON.find(x=>x.a===addr);
-  if(mp){
-    const el = document.getElementById('t-'+mp.k);
-    if(el) el.textContent = (value*mp.s).toFixed(1);
-  }
-}
 
-async function send(bytes){
-  if(!usb) throw new Error('Chưa kết nối');
-  log('TX '+hex(bytes),'tx');
-  await usb.transferOut(epOut.endpointNumber, bytes);
-}
-
-/* ============================================================
-   4. UI + XÁC MINH
-   ============================================================ */
-const $ = id => document.getElementById(id);
-function log(msg,cls=''){
-  const t = new Date().toLocaleTimeString('vi-VN');
-  const d = document.createElement('div');
-  d.className = 'l-'+cls;
-  d.textContent = `[${t}] ${msg}`;
-  $('log').appendChild(d);
-  $('log').scrollTop = $('log').scrollHeight;
-}
-function hex(a){ return Array.from(a).map(b=>b.toString(16).padStart(2,'0').toUpperCase()).join(' '); }
-
-let verifyHistory = [];
-
-function addVerify(name, sent, readBack, ok){
-  const icon = ok ? '✅' : '❌';
-  const cls = ok ? 'l-ok' : 'l-fail';
-  const line = `${icon} ${name} | Gửi: ${sent} | Đọc: ${readBack} | ${ok ? 'THÀNH CÔNG' : 'THẤT BẠI'}`;
-  verifyHistory.push(line);
-  const el = $('verifyLog');
-  if(el.textContent.startsWith('Chưa')) el.textContent = '';
-  el.textContent += line + '\n';
-  el.scrollTop = el.scrollHeight;
-  log(line, cls);
-}
-
-function renderGrid(tab){
-  const c = $('grid-'+tab);
-  c.innerHTML = '';
-  PARAMS[tab].forEach((p,i)=>{
-    const card = document.createElement('div');
-    card.className = 'card';
-    card.innerHTML = `
-      <label>${p.n} <span style="color:#5a6a7a">(0x${p.a.toString(16).toUpperCase()})</span></label>
-      <div class="val" id="v-${tab}-${i}">${p.v!==undefined?p.v:'—'}</div>
-      <input type="number" step="any" id="i-${tab}-${i}"
-             value="${p.nv||''}" placeholder="mới"
-             data-tab="${tab}" data-i="${i}">
-      <div style="font-size:10px;color:#5a6a7a">
-        ${p.u||''} · ${p.mn}→${p.mx}
-      </div>`;
-    c.appendChild(card);
+  list.addEventListener('click', e => {
+    const delBtn = e.target.closest('[data-del]');
+    if (delBtn) {
+      e.stopPropagation();
+      const n = delBtn.dataset.del;
+      if (confirm('Xóa tệp "' + n + '"?')) { FS.del(n); render(); }
+      return;
+    }
+    const row = e.target.closest('.file-row');
+    if (!row) return;
+    const n = row.dataset.name;
+    const content = FS.read(n);
+    createWindow('notepad', { title:'Notepad — '+n, icon:'📝', width:660, height:470, build:(b,api)=>{
+      buildNotepad(b, api);
+      b.querySelector('#npArea').value = content || '';
+      b.querySelector('#npName').value = n;
+      b.querySelector('#npArea').dispatchEvent(new Event('input'));
+    }});
   });
-  c.querySelectorAll('input').forEach(inp=>{
-    inp.addEventListener('input', e=>{
-      const t = e.target.dataset.tab;
-      const i = +e.target.dataset.i;
-      const p = PARAMS[t][i];
-      p.nv = e.target.value;
-      const v = parseFloat(e.target.value);
-      if(!isNaN(v) && (v<p.mn||v>p.mx)){
-        e.target.style.borderColor = 'var(--warn)';
+
+  body.querySelector('#fmRefresh').onclick = render;
+  body.querySelector('#fmNew').onclick = () => {
+    const n = prompt('Tên tệp mới:', 'taptin' + (FS.list().length+1) + '.txt');
+    if (!n) return;
+    FS.save(n.trim(), '');
+    render();
+  };
+  body.querySelector('#fmWipe').onclick = () => {
+    if (!FS.list().length) return;
+    if (confirm('Xóa TẤT CẢ tệp? Hành động này không thể hoàn tác.')) {
+      localStorage.removeItem(FS.KEY); render();
+    }
+  };
+
+  render();
+  window.addEventListener('focus', render);
+}
+
+function escapeHtml(s){ return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+/* ---------- TERMINAL ---------- */
+function buildTerminal(body){
+  body.innerHTML = `
+    <div class="term">
+      <div class="term-out" id="tout"></div>
+      <div class="term-line">
+        <span class="term-prompt">user@webos:~$</span>
+        <input class="term-in" id="tin" autocomplete="off" spellcheck="false">
+      </div>
+    </div>`;
+  const out = body.querySelector('#tout');
+  const input = body.querySelector('#tin');
+  const history = []; let hIdx = -1;
+
+  const print = (text, cls='') => {
+    const d = document.createElement('div');
+    if (cls) d.className = cls;
+    d.textContent = text;
+    out.appendChild(d);
+    out.scrollTop = out.scrollHeight;
+  };
+
+  print('WebOS Terminal v1.0 — gõ "help" để xem danh sách lệnh.', 'info');
+  print('');
+
+  const CMDS = {
+    help(){
+      print('Danh sách lệnh khả dụng:', 'info');
+      print('  help              Hiển thị trợ giúp');
+      print('  ls / dir          Liệt kê tệp trong hệ thống');
+      print('  cat <tên>         Đọc nội dung tệp');
+      print('  write <tên> <nd>  Tạo tệp mới');
+      print('  rm <tên>          Xóa tệp');
+      print('  open <app>        Mở ứng dụng (calc, notepad, files, paint, game...)');
+      print('  calc <biểu thức>  Tính toán, ví dụ: calc 25*4+10');
+      print('  date              Ngày giờ hiện tại');
+      print('  echo <text>       In ra văn bản');
+      print('  theme <0-4>       Đổi hình nền');
+      print('  clear             Xóa màn hình');
+      print('  whoami            Thông tin người dùng');
+    },
+    ls(){
+      const f = FS.list();
+      if (!f.length) return print('(thư mục trống)');
+      print('Tên tệp'.padEnd(28) + 'Kích thước'.padEnd(14) + 'Sửa đổi', 'info');
+      f.forEach(x => print(
+        x.name.padEnd(28) +
+        (x.content.length + ' B').padEnd(14) +
+        new Date(x.mtime).toLocaleString('vi-VN')
+      ));
+    },
+    dir(){ CMDS.ls(); },
+    cat(a){
+      if (!a) return print('Dùng: cat <tên-tệp>', 'err');
+      const c = FS.read(a);
+      c === null ? print('Không tìm thấy tệp: ' + a, 'err') : print(c || '(tệp rỗng)');
+    },
+    write(a){
+      const i = a.indexOf(' ');
+      if (i < 0) return print('Dùng: write <tên-tệp> <nội dung>', 'err');
+      const name = a.slice(0, i), content = a.slice(i+1);
+      FS.save(name, content);
+      print(`✔ Đã tạo tệp "${name}" (${content.length} ký tự)`, 'ok');
+    },
+    rm(a){
+      if (!a) return print('Dùng: rm <tên-tệp>', 'err');
+      if (FS.read(a) === null) return print('Không tìm thấy tệp: ' + a, 'err');
+      FS.del(a); print('✔ Đã xóa "' + a + '"', 'ok');
+    },
+    open(a){
+      const map = { calc:'calculator', calculator:'calculator', notepad:'notepad', note:'notepad',
+                    files:'files', explorer:'files', paint:'paint', terminal:'terminal',
+                    game:'game', clock:'clock', settings:'settings', browser:'browser', about:'about' };
+      const id = map[(a||'').toLowerCase()];
+      if (!id) return print('Không rõ ứng dụng. Thử: calc, notepad, files, paint, game, clock, settings', 'err');
+      launch(id); print('✔ Đang mở ' + APPS[id].name + '...', 'ok');
+    },
+    calc(a){
+      if (!a) return print('Dùng: calc <biểu thức>', 'err');
+      if (!/^[0-9+\-*/(). %]+$/.test(a)) return print('Biểu thức không hợp lệ', 'err');
+      try {
+        const r = Function('"use strict";return ('+a+')')();
+        print(a + ' = ' + (Math.round(r*1e10)/1e10), 'ok');
+      } catch(e){ print('Lỗi cú pháp', 'err'); }
+    },
+    date(){ print(new Date().toLocaleString('vi-VN', {dateStyle:'full', timeStyle:'medium'})); },
+    echo(a){ print(a || ''); },
+    whoami(){ print('user  (WebOS — môi trường mô phỏng trên trình duyệt)'); },
+    theme(a){
+      const n = parseInt(a,10);
+      if (isNaN(n) || n < 0 || n > 4) return print('Dùng: theme <0-4>', 'err');
+      setWallpaper(n); print('✔ Đã đổi hình nền #' + n, 'ok');
+    },
+    clear(){ out.innerHTML = ''; },
+  };
+
+  input.addEventListener('keydown', e => {
+    if (e.key === 'Enter') {
+      const line = input.value.trim();
+      input.value = '';
+      print('user@webos:~$ ' + line, 'cmd');
+      if (!line) return;
+      history.push(line); hIdx = history.length;
+
+      const sp = line.indexOf(' ');
+      const cmd = (sp < 0 ? line : line.slice(0, sp)).toLowerCase();
+      const arg = sp < 0 ? '' : line.slice(sp+1).trim();
+
+      if (CMDS[cmd]) {
+        try { CMDS[cmd](arg); } catch(err){ print('Lỗi: ' + err.message, 'err'); }
       } else {
-        e.target.style.borderColor = '';
+        print(`Lệnh không tồn tại: "${cmd}". Gõ "help" để được trợ giúp.`, 'err');
       }
+      print('');
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      if (hIdx > 0) input.value = history[--hIdx];
+    } else if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      if (hIdx < history.length - 1) input.value = history[++hIdx];
+      else { hIdx = history.length; input.value = ''; }
+    }
+  });
+
+  body.addEventListener('click', () => input.focus());
+  setTimeout(()=>input.focus(), 120);
+}
+
+/* ---------- PAINT ---------- */
+function buildPaint(body){
+  body.innerHTML = `
+    <div class="pt-wrap">
+      <div class="pt-bar">
+        <input type="color" id="ptColor" value="#4f8cff">
+        <label>Cỡ: <input type="range" id="ptSize" min="1" max="40" value="5"><span id="ptSizeVal">5</span></label>
+        <button class="tb-btn" id="ptEraser">🧽 Tẩy</button>
+        <button class="tb-btn" id="ptClear">🗑 Xóa hết</button>
+        <button class="tb-btn primary" id="ptSave">⬇ Lưu ảnh</button>
+      </div>
+      <canvas class="pt-canvas" id="ptCanvas"></canvas>
+    </div>`;
+
+  const canvas = body.querySelector('#ptCanvas');
+  const ctx = canvas.getContext('2d');
+  const colorI = body.querySelector('#ptColor');
+  const sizeI = body.querySelector('#ptSize');
+  const sizeVal = body.querySelector('#ptSizeVal');
+  let drawing = false, eraser = false;
+
+  function fit(){
+    const r = canvas.parentElement.getBoundingClientRect();
+    const bar = body.querySelector('.pt-bar').offsetHeight;
+    const w = Math.max(100, Math.floor(r.width));
+    const h = Math.max(100, Math.floor(canvas.parentElement.clientHeight - bar));
+    const img = ctx.getImageData ? null : null;
+    canvas.width = w; canvas.height = h;
+    ctx.fillStyle = '#ffffff'; ctx.fillRect(0,0,w,h);
+    ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+  }
+  setTimeout(fit, 30);
+  window.addEventListener('resize', () => {
+    if (!document.body.contains(canvas)) return;
+    const old = canvas.toDataURL();
+    fit();
+    const im = new Image();
+    im.onload = () => ctx.drawImage(im, 0, 0);
+    im.src = old;
+  });
+
+  const pos = e => {
+    const r = canvas.getBoundingClientRect();
+    return { x: e.clientX - r.left, y: e.clientY - r.top };
+  };
+
+  canvas.addEventListener('pointerdown', e => {
+    drawing = true;
+    canvas.setPointerCapture(e.pointerId);
+    const p = pos(e);
+    ctx.beginPath();
+    ctx.moveTo(p.x, p.y);
+    ctx.strokeStyle = eraser ? '#ffffff' : colorI.value;
+    ctx.lineWidth = parseInt(sizeI.value, 10);
+    ctx.lineTo(p.x + 0.01, p.y);
+    ctx.stroke();
+  });
+  canvas.addEventListener('pointermove', e => {
+    if (!drawing) return;
+    const p = pos(e);
+    ctx.lineTo(p.x, p.y);
+    ctx.strokeStyle = eraser ? '#ffffff' : colorI.value;
+    ctx.lineWidth = parseInt(sizeI.value, 10);
+    ctx.stroke();
+  });
+  const stop = () => { drawing = false; };
+  canvas.addEventListener('pointerup', stop);
+  canvas.addEventListener('pointerleave', stop);
+  canvas.addEventListener('pointercancel', stop);
+
+  sizeI.oninput = () => sizeVal.textContent = sizeI.value;
+  body.querySelector('#ptEraser').onclick = e => {
+    eraser = !eraser;
+    e.target.style.background = eraser ? '#4f8cff' : '';
+    e.target.style.color = eraser ? '#fff' : '';
+  };
+  body.querySelector('#ptClear').onclick = () => {
+    if (confirm('Xóa toàn bộ bản vẽ?')) {
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+    }
+  };
+  body.querySelector('#ptSave').onclick = () => {
+    const a = document.createElement('a');
+    a.download = 'banve-' + Date.now() + '.png';
+    a.href = canvas.toDataURL('image/png');
+    a.click();
+  };
+}
+
+/* ---------- BROWSER ---------- */
+function buildBrowser(body){
+  body.innerHTML = `
+    <div style="display:flex;flex-direction:column;height:100%">
+      <div class="br-bar">
+        <button class="tb-btn" id="brBack">◀</button>
+        <button class="tb-btn" id="brReload">🔄</button>
+        <input class="br-url" id="brUrl" placeholder="Nhập địa chỉ trang web..." value="https://example.com">
+        <button class="tb-btn primary" id="brGo">Đi</button>
+      </div>
+      <iframe class="br-frame" id="brFrame" sandbox="allow-scripts allow-same-origin allow-forms allow-popups"></iframe>
+    </div>`;
+
+  const frame = body.querySelector('#brFrame');
+  const url = body.querySelector('#brUrl');
+
+  function go(){
+    let u = url.value.trim();
+    if (!u) return;
+    if (!/^https?:\/\//i.test(u)) u = 'https://' + u;
+    url.value = u;
+    frame.src = u;
+  }
+  body.querySelector('#brGo').onclick = go;
+  body.querySelector('#brReload').onclick = () => frame.src = frame.src;
+  body.querySelector('#brBack').onclick = () => { try { frame.contentWindow.history.back(); } catch(e){ } };
+  url.addEventListener('keydown', e => { if (e.key === 'Enter') go(); });
+
+  setTimeout(go, 60);
+}
+
+/* ---------- CLOCK ---------- */
+function buildClock(body){
+  body.innerHTML = `
+    <div class="clock-wrap">
+      <div class="clock-time" id="ckTime">--:--:--</div>
+      <div class="clock-date" id="ckDate">...</div>
+      <div class="clock-sec" id="ckSec">WEBOS</div>
+    </div>`;
+  const t = body.querySelector('#ckTime');
+  const d = body.querySelector('#ckDate');
+  const s = body.querySelector('#ckSec');
+  const days = ['Chủ nhật','Thứ hai','Thứ ba','Thứ tư','Thứ năm','Thứ sáu','Thứ bảy'];
+
+  const tick = () => {
+    if (!document.body.contains(body)) { clearInterval(iv); return; }
+    const n = new Date();
+    const p = x => String(x).padStart(2,'0');
+    t.textContent = p(n.getHours()) + ':' + p(n.getMinutes()) + ':' + p(n.getSeconds());
+    d.textContent = days[n.getDay()] + ', ' + n.getDate() + '/' + (n.getMonth()+1) + '/' + n.getFullYear();
+    s.textContent = 'GIỜ HỆ THỐNG';
+  };
+  tick();
+  const iv = setInterval(tick, 1000);
+}
+
+/* ---------- GAME: TIC TAC TOE ---------- */
+function buildGame(body){
+  body.innerHTML = `
+    <div class="ttt">
+      <h3>❌ Tic Tac Toe ⭕</h3>
+      <div class="ttt-status" id="ttStatus">Lượt của bạn (X)</div>
+      <div class="ttt-board" id="ttBoard">
+        ${Array.from({length:9},(_,i)=>`<button class="ttt-cell" data-i="${i}"></button>`).join('')}
+      </div>
+      <button class="tb-btn primary" id="ttReset" style="padding:9px 26px">Chơi lại</button>
+      <div style="font-size:11.5px;color:var(--sub)">Bạn là X — Máy là O</div>
+    </div>`;
+
+  const boardEl = body.querySelector('#ttBoard');
+  const statusEl = body.querySelector('#ttStatus');
+  let b, over, turn;
+
+  const LINES = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
+
+  function winner(bd){
+    for (const L of LINES){
+      const [a,c,d] = L;
+      if (bd[a] && bd[a] === bd[c] && bd[a] === bd[d]) return { p:bd[a], line:L };
+    }
+    return bd.every(Boolean) ? { p:'draw' } : null;
+  }
+
+  function draw(){
+    boardEl.querySelectorAll('.ttt-cell').forEach((c,i)=>{
+      c.textContent = b[i] === 'X' ? '❌' : b[i] === 'O' ? '⭕' : '';
+      c.classList.remove('win');
     });
-  });
-}
-
-async function readTab(tab){
-  log(`── Đọc ${tab} ──`,'');
-  for(const p of PARAMS[tab]){
-    try{ await send(PROTO.rd(p.a)); }catch(e){ log('ERR '+e.message,'err'); }
-    await new Promise(r=>setTimeout(r,180));
-  }
-}
-
-/* ============================================================
-   GHI + XÁC MINH (READ-BACK VERIFICATION)
-   ============================================================ */
-async function writeTabVerify(tab){
-  if(!confirm(`Ghi tất cả giá trị mới của tab "${tab}" VÀ xác minh?`)) return;
-  log(`══ BẮT ĐẦU GHI + XÁC MINH: ${tab} ══`,'');
-  let okCount = 0, failCount = 0;
-
-  for(const p of PARAMS[tab]){
-    if(p.nv===''||p.nv===undefined) continue;
-
-    const sentVal = parseFloat(p.nv);
-    const raw = Math.round(sentVal / p.s);
-
-    try{
-      // BƯỚC 1: Ghi
-      await send(PROTO.wr(p.a, raw));
-      await new Promise(r=>setTimeout(r,250));
-
-      // BƯỚC 2: Đọc lại để xác minh
-      const readVal = await new Promise((resolve, reject)=>{
-        const timeout = setTimeout(()=>reject(new Error('Timeout đọc lại')), 1500);
-        pending.set(p.a, (v)=>{ clearTimeout(timeout); resolve(v); });
-        send(PROTO.rd(p.a)).catch(reject);
-      });
-
-      // BƯỚC 3: So sánh
-      const diff = Math.abs(readVal - sentVal);
-      const ok = diff <= (p.s >= 1 ? 1 : 0.15);
-
-      if(ok){ okCount++; addVerify(p.n, sentVal, readVal, true); }
-      else { failCount++; addVerify(p.n, sentVal, readVal, false); }
-
-      await new Promise(r=>setTimeout(r,200));
-    }catch(e){
-      failCount++;
-      addVerify(p.n, sentVal, 'LỖI: '+e.message, false);
-    }
   }
 
-  log(`══ KẾT THÚC: ${okCount} thành công / ${failCount} thất bại ══`, failCount?'fail':'ok');
-  if(failCount>0) alert(`⚠️ ${failCount} thông số không được xác nhận! Kiểm tra tab Xác minh.`);
-}
+  function finish(res){
+    over = true;
+    if (res.p === 'draw') statusEl.textContent = '🤝 Hòa!';
+    else if (res.p === 'X') statusEl.textContent = '🎉 Bạn thắng!';
+    else statusEl.textContent = '😢 Máy thắng!';
+    if (res.line) res.line.forEach(i => boardEl.querySelector(`[data-i="${i}"]`).classList.add('win'));
+  }
 
-/* Monitor */
-let monTimer=null;
-function startMon(){
-  if(monTimer) return;
-  $('btnStartMon').disabled = true;
-  $('btnStopMon').disabled = false;
-  log('▶ Bắt đầu monitor','');
-  monTimer = setInterval(async ()=>{
-    if(!usb) return;
-    for(const m of MON){
-      try{ await send(PROTO.rd(m.a)); await new Promise(r=>setTimeout(r,40)); }catch(e){}
-    }
-  }, 1200);
-}
-function stopMon(){
-  if(monTimer){ clearInterval(monTimer); monTimer=null; }
-  $('btnStartMon').disabled = false;
-  $('btnStopMon').disabled = true;
-  log('⏹ Dừng monitor','');
-}
+  function aiMove(){
+    const empty = b.map((v,i)=>v?null:i).filter(v=>v!==null);
+    // 1. Thắng nếu có thể
+    for (const i of empty){ const t=[...b]; t[i]='O'; if (winner(t)?.p==='O') return i; }
+    // 2. Chặn người chơi
+    for (const i of empty){ const t=[...b]; t[i]='X'; if (winner(t)?.p==='X') return i; }
+    // 3. Ưu tiên giữa
+    if (b[4]==='') return 4;
+    // 4. Ngẫu nhiên
+    return empty[Math.floor(Math.random()*empty.length)];
+  }
 
-/* Tabs */
-document.querySelectorAll('.tab').forEach(t=>{
-  t.addEventListener('click',()=>{
-    document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
-    document.querySelectorAll('.tab-content').forEach(x=>x.classList.remove('active'));
-    t.classList.add('active');
-    $('tab-'+t.dataset.tab).classList.add('active');
+  function step(i){
+    if (over || b[i] || !turn) return;
+    b[i] = 'X'; draw();
+    let res = winner(b);
+    if (res) return finish(res);
+    turn = false;
+    statusEl.textContent = 'Máy đang suy nghĩ...';
+    setTimeout(()=>{
+      const m = aiMove();
+      if (m !== undefined){ b[m] = 'O'; draw(); }
+      res = winner(b);
+      if (res) return finish(res);
+      turn = true;
+      statusEl.textContent = 'Lượt của bạn (X)';
+    }, 320);
+  }
+
+  boardEl.addEventListener('click', e => {
+    const c = e.target.closest('.ttt-cell');
+    if (c) step(parseInt(c.dataset.i, 10));
   });
+
+  function reset(){
+    b = Array(9).fill('');
+    over = false; turn = true;
+    statusEl.textContent = 'Lượt của bạn (X)';
+    draw();
+  }
+  body.querySelector('#ttReset').onclick = reset;
+  reset();
+}
+
+/* ---------- SETTINGS ---------- */
+function buildSettings(body){
+  const cur = getWallpaper();
+  const accents = ['#4f8cff','#a855f7','#10b981','#f59e0b','#ef4444','#ec4899','#06b6d4'];
+  body.innerHTML = `
+    <div class="pad">
+      <div class="set-group">
+        <h5>Hình nền</h5>
+        <div class="wp-grid">
+          ${[0,1,2,3,4].map(i=>`<div class="wp-item w${i} ${i===cur?'sel':''}" data-wp="${i}"></div>`).join('')}
+        </div>
+      </div>
+      <div class="set-group">
+        <h5>Màu nhấn</h5>
+        <div class="color-row">
+          ${accents.map(c=>`<div class="color-dot" data-c="${c}" style="background:${c}"></div>`).join('')}
+        </div>
+      </div>
+      <div class="set-group">
+        <h5>Hệ thống</h5>
+        <div style="font-size:13px;color:var(--sub);line-height:1.9">
+          <div>💾 Bộ nhớ: <b style="color:var(--text)" id="stFiles">0</b> tệp</div>
+          <div>🖥️ Độ phân giải: <b style="color:var(--text)">${window.innerWidth} × ${window.innerHeight}</b></div>
+          <div>🌐 Trạng thái: <b style="color:#86efac">Hoạt động ngoại tuyến</b></div>
+        </div>
+        <button class="tb-btn" id="stReset" style="margin-top:14px;color:#ff8b8f">Xóa toàn bộ dữ liệu</button>
+      </div>
+    </div>`;
+
+  body.querySelector('#stFiles').textContent = FS.list().length;
+
+  body.querySelectorAll('[data-wp]').forEach(el => {
+    el.onclick = () => {
+      setWallpaper(parseInt(el.dataset.wp,10));
+      body.querySelectorAll('[data-wp]').forEach(x=>x.classList.remove('sel'));
+      el.classList.add('sel');
+    };
+  });
+  body.querySelectorAll('[data-c]').forEach(el => {
+    el.onclick = () => {
+      document.documentElement.style.setProperty('--accent', el.dataset.c);
+      localStorage.setItem('webos_accent', el.dataset.c);
+      body.querySelectorAll('[data-c]').forEach(x=>x.classList.remove('sel'));
+      el.classList.add('sel');
+    };
+  });
+  body.querySelector('#stReset').onclick = () => {
+    if (confirm('Xóa tất cả tệp và cài đặt?')) {
+      localStorage.clear();
+      location.reload();
+    }
+  };
+}
+
+/* ---------- ABOUT ---------- */
+function buildAbout(body){
+  body.innerHTML = `
+    <div class="pad" style="line-height:1.9;font-size:13.5px">
+      <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px">
+        <div style="width:60px;height:60px;border-radius:16px;background:linear-gradient(135deg,var(--accent),#a855f7);display:flex;align-items:center;justify-content:center;font-size:30px">💻</div>
+        <div>
+          <div style="font-size:20px;font-weight:600">WebOS 1.0</div>
+          <div style="color:var(--sub);font-size:12.5px">Máy tính ảo chạy trên trình duyệt</div>
+        </div>
+      </div>
+      <p style="color:var(--sub)">
+        Đây là một <b style="color:var(--text)">môi trường máy tính mô phỏng</b> hoạt động hoàn toàn
+        ngoại tuyến trong trình duyệt. Mọi ứng dụng đều chạy thật bằng JavaScript,
+        dữ liệu được lưu trong <code>localStorage</code> của trình duyệt.
+      </p>
+      <div style="margin-top:18px;padding:14px;border-radius:10px;background:rgba(79,140,255,.1);border:1px solid rgba(79,140,255,.25);color:#9dc0ff;font-size:12.5px">
+        ⚠️ Đây là mô phỏng giao diện, <b>không phải</b> máy ảo thật. Nó không thể chạy
+        các phần mềm Windows/Mac thực tế (như Word, Photoshop...).
+        Muốn chạy phần mềm thật cần VirtualBox/VMware + file cài đặt hệ điều hành.
+      </div>
+      <div style="margin-top:18px;color:var(--sub);font-size:12.5px">
+        <b style="color:var(--text)">Ứng dụng có sẵn:</b> File Explorer, Notepad, Máy tính,
+        Terminal, Paint, Trình duyệt, Đồng hồ, Tic Tac Toe, Cài đặt.
+      </div>
+    </div>`;
+}
+
+/* =========================================================
+   HÌNH NỀN
+   ========================================================= */
+function getWallpaper(){ return parseInt(localStorage.getItem('webos_wp') || '1', 10); }
+function setWallpaper(n){
+  localStorage.setItem('webos_wp', n);
+  const d = document.getElementById('desktop');
+  d.className = 'wp' + n;
+}
+
+/* =========================================================
+   MENU START + ICONS + TASKBAR
+   ========================================================= */
+const startMenu = document.getElementById('start-menu');
+const startBtn  = document.getElementById('start-btn');
+
+function buildStartMenu(){
+  const grid = document.getElementById('start-grid');
+  grid.innerHTML = Object.entries(APPS).map(([id,a]) =>
+    `<button class="app-tile" data-app="${id}"><span class="ic">${a.icon}</span><span>${a.name}</span></button>`
+  ).join('');
+  grid.onclick = e => {
+    const t = e.target.closest('[data-app]');
+    if (t) launch(t.dataset.app);
+  };
+}
+function closeStartMenu(){ startMenu.classList.remove('open'); startBtn.classList.remove('active'); }
+
+startBtn.onclick = e => {
+  e.stopPropagation();
+  const open = startMenu.classList.toggle('open');
+  startBtn.classList.toggle('active', open);
+};
+document.addEventListener('click', e => {
+  if (!startMenu.contains(e.target) && e.target !== startBtn) closeStartMenu();
 });
 
-/* Bindings */
-$('btnConnect').addEventListener('click', connectUSB);
-$('btnDisconnect').addEventListener('click', disconnectUSB);
-$('rdBasic').addEventListener('click', ()=>readTab('basic'));
-$('wrBasic').addEventListener('click', ()=>writeTabVerify('basic'));
-$('rdAdv').addEventListener('click', ()=>readTab('advanced'));
-$('wrAdv').addEventListener('click', ()=>writeTabVerify('advanced'));
-$('rdModes').addEventListener('click', ()=>readTab('modes'));
-$('wrModes').addEventListener('click', ()=>writeTabVerify('modes'));
-$('btnStartMon').addEventListener('click', startMon);
-$('btnStopMon').addEventListener('click', stopMon);
-$('btnClearLog').addEventListener('click', ()=>$('log').innerHTML='');
-$('btnClearVerify').addEventListener('click', ()=>{ verifyHistory=[]; $('verifyLog').textContent='Chưa có xác minh nào.'; });
-$('btnExportVerify').addEventListener('click', ()=>{
-  const blob = new Blob([verifyHistory.join('\n')], {type:'text/plain'});
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = `votol-verify-${Date.now()}.txt`;
-  a.click();
-});
-$('btnRaw').addEventListener('click', async ()=>{
-  const t = $('rawCmd').value.trim();
-  if(!t) return;
-  const b = t.split(/\s+/).map(x=>parseInt(x,16));
-  if(b.some(isNaN)){ log('Hex sai','err'); return; }
-  try{ await send(new Uint8Array(b)); }catch(e){ log(e.message,'err'); }
-});
+function buildDesktopIcons(){
+  const wrap = document.getElementById('desktop-icons');
+  const order = ['files','notepad','calculator','terminal','paint','browser','game','clock','settings','about'];
+  wrap.innerHTML = order.map(id => {
+    const a = APPS[id];
+    return `<div class="desk-icon" data-app="${id}"><span class="ic">${a.icon}</span><span>${a.name}</span></div>`;
+  }).join('');
+  wrap.onclick = e => {
+    const t = e.target.closest('[data-app]');
+    if (t) launch(t.dataset.app);
+  };
+}
 
-/* Init */
-renderGrid('basic');
-renderGrid('advanced');
-renderGrid('modes');
-log('Sẵn sàng. Cắm cáp OTG + cáp USB VOTOL rồi bấm "Kết nối".','');
-log('Nút "Ghi & Xác minh" sẽ tự động đọc lại thông số sau khi ghi.','');
+/* Đồng hồ taskbar */
+function tickTray(){
+  const n = new Date();
+  const p = x => String(x).padStart(2,'0');
+  document.getElementById('tray-time').textContent =
+    p(n.getHours()) + ':' + p(n.getMinutes()) + '  ' + p(n.getDate()) + '/' + (n.getMonth()+1);
+}
+setInterval(tickTray, 1000);
+tickTray();
+
+/* Tray click -> mở đồng hồ */
+document.getElementById('tray').onclick = () => launch('clock');
+
+/* =========================================================
+   KHỞI ĐỘNG
+   ========================================================= */
+(function init(){
+  setWallpaper(getWallpaper());
+  const acc = localStorage.getItem('webos_accent');
+  if (acc) document.documentElement.style.setProperty('--accent', acc);
+
+  buildDesktopIcons();
+  buildStartMenu();
+
+  // Mở sẵn File Explorer lần đầu
+  if (!localStorage.getItem('webos_seen')) {
+    localStorage.setItem('webos_seen', '1');
+    setTimeout(() => launch('about'), 400);
+  }
+
+  // Phím tắt
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') closeStartMenu();
+    if (e.altKey && e.key === 'F4' && activeId) { e.preventDefault(); closeWindow(activeId); }
+    if (e.key === 'Meta' || (e.ctrlKey && e.key === 'Escape')) {
+      e.preventDefault();
+      startMenu.classList.toggle('open');
+      startBtn.classList.toggle('active', startMenu.classList.contains('open'));
+    }
+  });
+})();
 </script>
 </body>
 </html>
