@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>{{ 'Đăng ký' if mode == 'register' else 'Đăng nhập' }} • AI Image Studio</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#0d1020;color:#f4f5fb;font-family:Arial,sans-serif;display:grid;min-height:100vh;place-items:center;padding:20px}
+.panel{width:min(420px,100%);background:#191e33;padding:28px;border:1px solid #303854;border-radius:22px}
+h1{margin:0 0 8px;font-size:27px}p{color:#aeb7d1;line-height:1.5}label{display:block;margin:16px 0 7px}
+input{width:100%;padding:14px;border-radius:12px;border:1px solid #414c6e;background:#10162a;color:white;font-size:16px}
+button{width:100%;margin-top:20px;padding:14px;border:0;border-radius:12px;background:#8b7cff;color:white;font-weight:bold;font-size:16px}
+a{color:#b7adff}.msg{color:#ffd48b;margin:10px 0}
+</style></head><body><main class="panel">
+<h1>AI Image Studio</h1><p>{{ 'Tạo tài khoản để sử dụng công cụ.' if mode == 'register' else 'Đăng nhập để tạo và chỉnh sửa ảnh.' }}</p>
+{% with messages = get_flashed_messages() %}{% for m in messages %}<div class="msg">{{m}}</div>{% endfor %}{% endwith %}
+<form method="post">
+<label>Tên tài khoản</label><input name="username" required minlength="3" maxlength="30" autocomplete="username">
+<label>Mật khẩu (ít nhất 8 ký tự)</label><input name="password" type="password" required minlength="8" autocomplete="{{ 'new-password' if mode == 'register' else 'current-password' }}">
+<button>{{ 'Tạo tài khoản' if mode == 'register' else 'Đăng nhập' }}</button>
+</form>
+<p>{% if mode == 'register' %}Đã có tài khoản? <a href="/login">Đăng nhập</a>{% else %}Chưa có tài khoản? <a href="/register">Đăng ký</a>{% endif %}</p>
+</main></body></html>
